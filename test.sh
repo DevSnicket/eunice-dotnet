@@ -1,3 +1,4 @@
+#!/bin/bash
 dotnet test \
 Analysis/File/Tests \
 -l trx \
@@ -7,5 +8,10 @@ Analysis/File/Tests \
 -p:AltCoverThreshold=100 \
 -p:AltCoverXmlReport=TestResults/coverage.xml
 
-dotnet tool install dotnet-reportgenerator-globaltool --tool-path . --version 4.5.6
-./reportgenerator -reports:Analysis/File/Tests/TestResults/coverage.xml -targetdir:Analysis/File/Tests/TestResults/CoverageReport
+dotnet tool install dotnet-reportgenerator-globaltool \
+--tool-path . \
+--version 4.5.6
+
+./reportgenerator \
+-reports:Analysis/File/Tests/TestResults/coverage.xml \
+-targetdir:Analysis/File/Tests/TestResults/CoverageReport
