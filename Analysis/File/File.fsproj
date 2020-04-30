@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AssemblyName>DevSnicket.Eunice.Analysis.File</AssemblyName>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+		<TargetFramework>netstandard2.1</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="Analyze.fs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Mono.Cecil" Version="0.11.2" />
+		<PackageReference Include="SharpYaml" Version="1.6.6" />
+	</ItemGroup>
+</Project>

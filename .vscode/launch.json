@@ -1,0 +1,16 @@
+{
+	"configurations": [
+		{
+			"args": [
+				"DevSnicket.Eunice.Analysis.File.Tests.dll",
+				"-nologo"
+			],
+			"cwd": "${workspaceFolder}/Analysis/File/Tests/bin/Debug",
+			"name": "tests",
+			"program": "xunit.console.dll",
+			"request": "launch",
+			"type": "coreclr"
+		}
+	],
+	"version": "0.2.0"
+}

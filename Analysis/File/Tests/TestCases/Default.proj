@@ -1,0 +1,8 @@
+<Project>
+	<PropertyGroup>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AssemblyName>TestCase</AssemblyName>
+		<NuGetRestoreTargets>dont</NuGetRestoreTargets>
+		<TargetFramework>netstandard2.1</TargetFramework>
+	</PropertyGroup>
+</Project>

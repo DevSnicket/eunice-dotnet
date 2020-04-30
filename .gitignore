@@ -1,0 +1,7 @@
+\.ionide
+\.store
+\bin
+\obj
+\reportgenerator.exe
+TestResults
+*.fsproj.user
