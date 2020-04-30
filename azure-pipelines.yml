@@ -1,0 +1,13 @@
+pool:
+  name: $(pool_name)
+  vmImage: 'ubuntu-latest'
+steps:
+  - task: UseDotNet@2
+    displayName: .NET Core 3.1.x
+    inputs:
+      version: 3.1.x
+      packageType: sdk
+  - script: ./test.sh
+    displayName: test
+trigger: [ master ]
+workspace: { clean: all }
