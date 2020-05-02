@@ -23,8 +23,9 @@
 	</ItemGroup>
 	<Target BeforeTargets="Build" Name="BuildTestCases">
 		<ItemGroup>
-			<TestCaseProjects Include="TestCases/**/.csproj" />
+			<TestCaseProjects Include="TestCases/**/*.csproj" />
 		</ItemGroup>
+		<MSBuild Projects="@(TestCaseProjects)" Targets="Restore" />
 		<MSBuild Projects="@(TestCaseProjects)" Properties="Configuration=Debug" />
 		<MSBuild Projects="@(TestCaseProjects)" Properties="Configuration=Release" />
 	</Target>

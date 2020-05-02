@@ -1,4 +1,5 @@
 #!/bin/bash
+
 dotnet test \
 Analysis/Files/Tests \
 -l trx \
