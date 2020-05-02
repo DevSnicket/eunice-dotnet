@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AssemblyName>DevSnicket.Eunice.Analysis.File.Tests</AssemblyName>
+		<AssemblyName>DevSnicket.Eunice.Analysis.Files.Tests</AssemblyName>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 	</PropertyGroup>
@@ -16,14 +16,14 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="../File.fsproj" />
+		<ProjectReference Include="../Files.fsproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="RunTestsFromFileSystem.fs" />
 	</ItemGroup>
 	<Target BeforeTargets="Build" Name="BuildTestCases">
 		<ItemGroup>
-			<TestCaseProjects Include="Cases/**/.csproj" />
+			<TestCaseProjects Include="TestCases/**/.csproj" />
 		</ItemGroup>
 		<MSBuild Projects="@(TestCaseProjects)" Properties="Configuration=Debug" />
 		<MSBuild Projects="@(TestCaseProjects)" Properties="Configuration=Release" />

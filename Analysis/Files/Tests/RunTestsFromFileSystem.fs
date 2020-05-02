@@ -1,5 +1,6 @@
-module DevSnicket.Eunice.Analysis.File.Tests
+module DevSnicket.Eunice.Analysis.Files.Tests
 
+open Analyzer;
 open System.IO
 open System
 

@@ -1,9 +1,9 @@
 #!/bin/bash
 dotnet test \
-Analysis/File/Tests \
+Analysis/Files/Tests \
 -l trx \
 -p:AltCover=true \
--p:AltCoverAssemblyFilter="^(?!DevSnicket.Eunice.Analysis.File$)" \
+-p:AltCoverAssemblyFilter="^(?!DevSnicket.Eunice.Analysis.Files$)" \
 -p:AltCoverForce=true \
 -p:AltCoverThreshold=100 \
 -p:AltCoverXmlReport=TestResults/coverage.xml
@@ -13,5 +13,5 @@ dotnet tool install dotnet-reportgenerator-globaltool \
 --version 4.5.6
 
 ./reportgenerator \
--reports:Analysis/File/Tests/TestResults/coverage.xml \
--targetdir:Analysis/File/Tests/TestResults/CoverageReport
+-reports:Analysis/Files/Tests/TestResults/coverage.xml \
+-targetdir:Analysis/Files/Tests/TestResults/CoverageReport
