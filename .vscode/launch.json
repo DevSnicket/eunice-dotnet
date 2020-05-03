@@ -11,7 +11,6 @@
 			"program": "xunit.console.dll",
 			"request": "launch",
 			"requireExactSource": false,
-			//"symbolOptions": { "searchPaths": [ "C:\\code\\SharpYaml\\SharpYaml\\bin\\Release\\netstandard2.0" ] },
 			"type": "coreclr"
 		}
 	],

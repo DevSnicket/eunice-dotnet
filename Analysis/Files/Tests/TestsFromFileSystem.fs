@@ -1,16 +1,8 @@
-module DevSnicket.Eunice.Analysis.Files.Tests
+module DevSnicket.Eunice.Analysis.Files.Tests.TestsFromFileSystem
 
-open Analyzer;
 open System.IO
-open System
 
-let TestCases =
- let directories =
-  Path.Join("..", "..", "TestCases")
-  |> Directory.EnumerateDirectories
- 
- Seq.allPairs [ "Debug"; "Release" ] directories
- |> Seq.map(fun (configuration, directory) -> [| configuration :> Object; directory :> Object |])
+let TestCases = TestCases.Parameters.createParameters
 
 [<Xunit.Theory>]
 [<Xunit.MemberData("TestCases")>]
@@ -21,7 +13,7 @@ let RunTestsFromFileSystem configuration directory =
 
  let analyzeProject =
   Path.Join(directory, "bin", configuration, "TestCase.dll")
-  |> Analyze
+  |> DevSnicket.Eunice.Analysis.Files.Analyzer.Analyze
 
  Xunit.Assert.Equal(
   loadExpected,

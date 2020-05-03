@@ -3,28 +3,17 @@ module DevSnicket.Eunice.Analysis.Files.Analyzer
 open Mono.Cecil
 open System
 
-let GetYamlLinesFromType (``type``: TypeDefinition) =
- let withNamespace() =
-  [
-   "- id: " + ``type``.Namespace
-   "  items: " + ``type``.Name
-  ];
-
- match ``type`` with
- | ``type`` when ``type``.Namespace <> "" -> withNamespace()
- | ``type`` when ``type``.Name = "<Module>" -> []
- | _ -> [ "- " + ``type``.Name ]
-
-let GetYamlLinesFromTypes (``module``: ModuleDefinition) =
+let private getYamlLinesFromTypes (``module``: ModuleDefinition) =
  ``module``.Types
- |> Seq.collect GetYamlLinesFromType
+ |> Seq.groupBy(fun ``type`` -> ``type``.Namespace)
+ |> Seq.collect TypesByNamespace.GetYamlLines
 
-let GetYamlLinesFromAssembly (assembly: AssemblyDefinition) =
+let private getYamlLinesFromAssembly (assembly: AssemblyDefinition) =
  assembly.Modules
- |> Seq.collect(GetYamlLinesFromTypes)
- |> fun lines -> String.Join("\n", lines)
+ |> Seq.collect getYamlLinesFromTypes
+ |> String.concat "\n"
 
 let Analyze (assemblyFilePath: String) =
  assemblyFilePath
  |> AssemblyDefinition.ReadAssembly
- |> GetYamlLinesFromAssembly
+ |> getYamlLinesFromAssembly

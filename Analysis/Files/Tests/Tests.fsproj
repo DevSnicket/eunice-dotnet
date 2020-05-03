@@ -19,7 +19,10 @@
 		<ProjectReference Include="../Files.fsproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Include="RunTestsFromFileSystem.fs" />
+		<Compile Include="TestCases/Configuration.fs" />
+		<Compile Include="TestCases/ProjectFilePaths.fs" />
+		<Compile Include="TestCases/Parameters.fs" />
+		<Compile Include="TestsFromFileSystem.fs" />
 	</ItemGroup>
 	<Target BeforeTargets="Build" Name="BuildTestCases">
 		<ItemGroup>
