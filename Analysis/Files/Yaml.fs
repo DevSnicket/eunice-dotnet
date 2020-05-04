@@ -1,7 +1,5 @@
 module DevSnicket.Eunice.Analysis.Files.Yaml
 
-open Model
-
 let rec private linesFromIdentifiersAndItems identifiersAndItems =
  identifiersAndItems
  |> Seq.collect linesFromIdentifierOrItem

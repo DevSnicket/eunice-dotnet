@@ -1,7 +1,6 @@
 module DevSnicket.Eunice.Analysis.Files.AssemblyAnalysis
 
 open Mono.Cecil
-open BaseNamespace
 open System
 
 let private segmentNamespaceOfType (``type``: TypeDefinition) =

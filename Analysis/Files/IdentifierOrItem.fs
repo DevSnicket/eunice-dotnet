@@ -1,4 +1,4 @@
-module DevSnicket.Eunice.Analysis.Files.Model
+namespace DevSnicket.Eunice.Analysis.Files
 
 open System
 

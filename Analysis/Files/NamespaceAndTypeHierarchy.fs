@@ -1,8 +1,5 @@
 module DevSnicket.Eunice.Analysis.Files.NamespaceAndTypeHierarchy
 
-open BaseNamespace
-open Model
-
 let private identifiersFromTypes =
  Seq.map(fun ``type`` -> Identifier(``type``.Name))
 

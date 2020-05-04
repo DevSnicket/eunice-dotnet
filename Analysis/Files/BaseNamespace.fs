@@ -2,12 +2,6 @@ module DevSnicket.Eunice.Analysis.Files.BaseNamespace
 
 open System
 
-type TypeWithNamespaceSegments =
- {
-  Name: String
-  NamespaceSegments: String list
- }
-
 type private BaseNamespaceWithTypes =
  {
   BaseNamespace: String
