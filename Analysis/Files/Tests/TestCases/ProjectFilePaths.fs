@@ -12,13 +12,12 @@ let private getWhenProjectDirectoryPath directoryPath =
  | false -> seq []
 
 let rec findInDirectoryPath directoryPath =
- let getForSubdirectoryPath subdirectoryPath =
-  Seq.concat(
-   seq [
-    getWhenProjectDirectoryPath subdirectoryPath
-    findInDirectoryPath(subdirectoryPath)
-   ])
-
  directoryPath
  |> Directory.EnumerateDirectories
  |> Seq.collect getForSubdirectoryPath
+
+and private getForSubdirectoryPath subdirectoryPath =
+ seq [
+  yield! getWhenProjectDirectoryPath subdirectoryPath
+  yield! findInDirectoryPath(subdirectoryPath)
+ ]

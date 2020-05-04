@@ -6,8 +6,11 @@
 		<TargetFramework>netstandard2.1</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Include="TypesByNamespace.fs" />
-		<Compile Include="Analyzer.fs" />
+		<Compile Include="Model.fs" />
+		<Compile Include="BaseNamespace.fs" />
+		<Compile Include="NamespaceAndTypeHierarchy.fs" />
+		<Compile Include="Yaml.fs" />
+		<Compile Include="AssemblyAnalysis.fs" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Mono.Cecil" Version="0.11.2" />
