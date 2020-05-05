@@ -3,16 +3,17 @@ namespace DevSnicket.Eunice.Analysis.Files
 open System
 
 type IdentifierOrItem =
- | Identifier of String
- | Item of Item
+    | Identifier of String
+    | Item of Item
+
 and Item =
- {
-  Identifier: String
-  Items: IdentifierOrItem list
- }
+    {
+        Identifier: String
+        Items: IdentifierOrItem list
+    }
 
 type IdentifierOrItemWithNamespaceSegments =
- {
-  IdentifierOrItem: IdentifierOrItem
-  NamespaceSegments: String list
- }
+    {
+        IdentifierOrItem: IdentifierOrItem
+        NamespaceSegments: String list
+    }
