@@ -2,10 +2,10 @@ module DevSnicket.Eunice.Analysis.Files.BaseNamespace
 
 open System
 
-type private BaseNamespaceWithTypes =
+type private BaseNamespaceWithTypes<'Type> =
  {
   BaseNamespace: String
-  Type: TypeWithNamespaceSegments
+  Type: 'Type
  }
 
 let private dequeueBaseNamespaceFromType ``type`` =

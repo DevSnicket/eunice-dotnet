@@ -1,7 +1,7 @@
 module DevSnicket.Eunice.Analysis.Files.NamespaceAndTypeHierarchy
 
-let private identifiersFromTypes =
- Seq.map(fun ``type`` -> Identifier(``type``.Name))
+let private identifiersAndItemsFromTypes =
+ Seq.map(fun ``type`` -> ``type``.IdentifierOrItem)
 
 let rec groupTypesAndNamespaceSegments types =
  types
@@ -17,5 +17,5 @@ and private groupTypesInNamespace (``namespace``, types) =
   }) ]
 
  match ``namespace`` with
- | "" -> types |> identifiersFromTypes
+ | "" -> types |> identifiersAndItemsFromTypes
  | _ -> itemsFromNamespace()

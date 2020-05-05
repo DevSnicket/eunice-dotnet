@@ -10,3 +10,9 @@ and Item =
   Identifier: String
   Items: IdentifierOrItem list
  }
+
+type IdentifierOrItemWithNamespaceSegments =
+ {
+  IdentifierOrItem: IdentifierOrItem
+  NamespaceSegments: String list
+ }

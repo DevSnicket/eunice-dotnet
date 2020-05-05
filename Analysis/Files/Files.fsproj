@@ -7,8 +7,8 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="IdentifierOrItem.fs" />
-		<Compile Include="TypeWithNamespaceSegments.fs" />
 		<Compile Include="BaseNamespace.fs" />
+		<Compile Include="NestedTypes.fs" />
 		<Compile Include="NamespaceAndTypeHierarchy.fs" />
 		<Compile Include="Yaml.fs" />
 		<Compile Include="AssemblyAnalysis.fs" />

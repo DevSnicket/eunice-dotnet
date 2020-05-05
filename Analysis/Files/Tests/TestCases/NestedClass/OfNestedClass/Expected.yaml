@@ -1,0 +1,6 @@
+﻿- id: Namespace
+  items:
+    - id: Class
+      items:
+        - id: ParentNestedClass
+          items: ChildNestedClass
