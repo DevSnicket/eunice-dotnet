@@ -1,36 +1,55 @@
 module DevSnicket.Eunice.Analysis.Files.Yaml
 
-let rec private linesFromIdentifiersAndItems identifiersAndItems =
+let private indentLines lines =
+    lines
+    |> Seq.map (fun line -> "  " + line)
+
+let private blockSequenceLines lines =
+    match lines with
+    | [] -> seq []
+    | head :: tail ->
+        seq [
+            yield "- " + head
+            yield! tail |> indentLines
+        ]
+
+let rec private linesForChildItems identifierOrItemOrIdentifiersAndItems =
+    match identifierOrItemOrIdentifiersAndItems with
+    | [ identifierOrItem ] -> linesForIdentifierOrItem identifierOrItem
+    | _ -> linesForIdentifiersAndItems identifierOrItemOrIdentifiersAndItems
+ 
+and private linesForIdentifiersAndItems (identifiersAndItems: IdentifierOrItem seq) =
     identifiersAndItems
-    |> Seq.collect linesFromIdentifierOrItem
+    |> Seq.collect (linesForIdentifierOrItem >> Seq.toList >> blockSequenceLines)
 
-and private linesFromIdentifierOrItem identifierOrItem =
+and private linesForIdentifierOrItem identifierOrItem =
     match identifierOrItem with
-    | Identifier identifier -> seq [ "- " + identifier ]
-    | Item item -> linesFromItem item
+    | Identifier identifier -> seq [ identifier ]
+    | Item item -> linesForItem item
 
-and private linesFromItem item =
+and private linesForItem item =
     seq [
-        "- id: " + item.Identifier
-        yield! linesFromItems item.Items
+        "id: " + item.Identifier
+        yield! linesForChildItemsMapping item.Items
     ]
 
-and private linesFromItems identifiersOrItems =
-    let keyYaml = "  items:"
+and private linesForChildItemsMapping identifiersOrItems =
+    let keyYaml = "items:"
 
     let withoutBlock value =
         seq [ keyYaml + " " + value ]
 
     let withBlock lines =
-        let linesWithIndent = lines |> Seq.map(fun line -> "    " + line)
-
-        seq [ keyYaml; yield! linesWithIndent ]
+        seq [
+            keyYaml
+            yield! lines |> indentLines
+        ]
 
     match identifiersOrItems with
     | [ Identifier singleIdentifier ] -> singleIdentifier |> withoutBlock
-    | _ -> identifiersOrItems |> linesFromIdentifiersAndItems |> withBlock
+    | _ -> identifiersOrItems |> linesForChildItems |> withBlock
 
-let fromModel identifiersAndItems =
+let createForIdentifiersAndItems identifiersAndItems =
     identifiersAndItems
-    |> linesFromIdentifiersAndItems
+    |> linesForIdentifiersAndItems
     |> String.concat "\n"

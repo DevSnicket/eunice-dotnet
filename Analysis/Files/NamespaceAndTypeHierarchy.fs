@@ -1,6 +1,6 @@
 module DevSnicket.Eunice.Analysis.Files.NamespaceAndTypeHierarchy
 
-let private identifiersAndItemsFromTypes =
+let private getIdentifiersAndItemsFromTypes =
     Seq.map(fun ``type`` -> ``type``.IdentifierOrItem)
 
 let rec groupTypesAndNamespaceSegments types =
@@ -10,12 +10,12 @@ let rec groupTypesAndNamespaceSegments types =
     |> Seq.toList
 
 and private groupTypesInNamespace (``namespace``, types) =
-    let itemsFromNamespace() =
+    let createItemForNamespace() =
         seq [ Item({
             Identifier = ``namespace``
-            Items = groupTypesAndNamespaceSegments(types)
+            Items = groupTypesAndNamespaceSegments types
         }) ]
 
     match ``namespace`` with
-    | "" -> types |> identifiersAndItemsFromTypes
-    | _ -> itemsFromNamespace()
+    | "" -> types |> getIdentifiersAndItemsFromTypes
+    | _ -> createItemForNamespace()
