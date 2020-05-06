@@ -4,7 +4,8 @@ let private indentLines lines =
     lines
     |> Seq.map (fun line -> "  " + line)
 
-let private blockSequenceLines lines =
+// Public so the empty pattern, not used by callers, can be tested
+let blockSequenceLines lines =
     match lines with
     | [] -> seq []
     | head :: tail ->

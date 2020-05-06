@@ -23,6 +23,7 @@
 		<Compile Include="TestCases/ProjectFilePaths.fs" />
 		<Compile Include="TestCases/Parameters.fs" />
 		<Compile Include="TestsFromFileSystem.fs" />
+		<Compile Include="YamlTest.fs" />
 	</ItemGroup>
 	<Target BeforeTargets="Build" Name="BuildTestCases">
 		<ItemGroup>
