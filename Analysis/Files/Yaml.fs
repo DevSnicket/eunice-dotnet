@@ -4,7 +4,7 @@ let private indentLines lines =
     lines
     |> Seq.map (fun line -> "  " + line)
 
-// Public so the empty pattern, not used by callers, can be tested
+// public so the empty can be tested
 let blockSequenceLines lines =
     match lines with
     | [] -> seq []
@@ -14,8 +14,10 @@ let blockSequenceLines lines =
             yield! tail |> indentLines
         ]
 
-let rec private linesForChildItems identifierOrItemOrIdentifiersAndItems =
+// public so the empty can be tested
+let rec linesForChildItems identifierOrItemOrIdentifiersAndItems =
     match identifierOrItemOrIdentifiersAndItems with
+    | [] -> seq []
     | [ identifierOrItem ] -> linesForIdentifierOrItem identifierOrItem
     | _ -> linesForIdentifiersAndItems identifierOrItemOrIdentifiersAndItems
  
@@ -34,7 +36,8 @@ and private linesForItem item =
         yield! linesForChildItemsMapping item.Items
     ]
 
-and private linesForChildItemsMapping identifiersOrItems =
+// public so the empty can be tested
+and linesForChildItemsMapping identifiersOrItems =
     let keyYaml = "items:"
 
     let withoutBlock value =
@@ -47,6 +50,7 @@ and private linesForChildItemsMapping identifiersOrItems =
         ]
 
     match identifiersOrItems with
+    | [] -> seq []
     | [ Identifier singleIdentifier ] -> singleIdentifier |> withoutBlock
     | _ -> identifiersOrItems |> linesForChildItems |> withBlock
 
