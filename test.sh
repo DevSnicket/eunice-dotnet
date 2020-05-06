@@ -21,4 +21,15 @@ dotnet tool install dotnet-reportgenerator-globaltool \
 -reporttypes:"Html;JsonSummary" \
 -targetdir:Analysis/Files/Tests/TestResults/CoverageReport
 
-grep -Pzo '"linecoverage": 100[^}]*"branchcoverage": 100' Analysis/Files/Tests/TestResults/CoverageReport/Summary.json
+function getCoverage {
+	value=$(grep -Po "(?<=\"$1coverage\": )[\.0-9]*" Analysis/Files/Tests/TestResults/CoverageReport/Summary.json | head -1)
+	echo $value%
+}
+echo
+branchcoverage=$(getCoverage "branch")
+echo branch coverage: $branchcoverage
+linecoverage=$(getCoverage "line")
+echo line coverage: $linecoverage
+if [ "$branchcoverage" != "100%" ] || [ "$linecoverage" != "100%" ]; then
+    exit 1
+fi
