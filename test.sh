@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 dotnet test \
 Analysis/Files/Tests \
 -l trx \
@@ -11,7 +13,8 @@ Analysis/Files/Tests \
 
 dotnet tool install dotnet-reportgenerator-globaltool \
 --tool-path . \
---version 4.5.6
+--version 4.5.6 \
+|| true # ignore error raised when already installed
 
 ./reportgenerator \
 -reports:Analysis/Files/Tests/TestResults/coverage.xml \
