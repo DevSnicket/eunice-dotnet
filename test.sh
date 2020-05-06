@@ -2,7 +2,7 @@
 
 dotnet test \
 Analysis/Files/Tests \
--l trx \
+-l "trx;LogFileName=.trx" \
 -p:AltCover=true \
 -p:AltCoverAssemblyFilter="^(?!DevSnicket.Eunice.Analysis.Files$)" \
 -p:AltCoverForce=true \
