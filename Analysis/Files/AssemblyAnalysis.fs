@@ -5,7 +5,7 @@ open System
 
 let private createIdentifierOrItemForAndSegmentNamespaceOfType (``type``: TypeDefinition) =
     {
-        IdentifierOrItem = NestedTypes.createIdentifierOrItemForType ``type``
+        IdentifierOrItem = TypeIdentifierOrItem.createIdentifierOrItemFromType ``type``
         NamespaceSegments = ``type``.Namespace.Split "." |> Array.toList
     }
 
