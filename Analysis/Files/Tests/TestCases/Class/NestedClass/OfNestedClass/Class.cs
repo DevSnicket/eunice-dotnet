@@ -1,6 +1,6 @@
 namespace Namespace {
 	class Class {
-		class ParentNestedClass { 
+		class ParentNestedClass {
 			class ChildNestedClass { }
 		}
 	}
