@@ -11,17 +11,3 @@ let BlockSequenceLinesOfEmpty() =
         seq [],
         Yaml.blockSequenceLines []
     )
-
-[<Xunit.Fact>]
-let LinesForChildItemsOfEmpty() =
-    Xunit.Assert.Equal<String seq>(
-        seq [],
-        Yaml.linesForChildItems []
-    )
-
-[<Xunit.Fact>]
-let LinesForChildItemsMappingOfEmpty() =
-    Xunit.Assert.Equal<String seq>(
-        seq [],
-        Yaml.linesForChildItemsMapping []
-    )

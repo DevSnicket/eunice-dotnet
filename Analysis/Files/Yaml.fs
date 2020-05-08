@@ -1,5 +1,7 @@
 module DevSnicket.Eunice.Analysis.Files.Yaml
 
+open System
+
 let private indentLines lines =
     lines
     |> Seq.map (fun line -> "  " + line)
@@ -14,44 +16,51 @@ let blockSequenceLines lines =
             yield! tail |> indentLines
         ]
 
-// public so the empty can be tested
-let rec linesForChildItems itemOrItems =
-    match itemOrItems with
-    | [] -> seq []
-    | [ item ] -> linesForItem item
-    | _ -> linesForItems itemOrItems
- 
-and private linesForItems (identifiers: Item seq) =
-    identifiers
-    |> Seq.collect (linesForItem >> Seq.toList >> blockSequenceLines)
-
-and private linesForItem item =
-    match item.Items with
-    | [] ->
-        seq [ item.Identifier ]
-    | items ->
-        seq [
-            "id: " + item.Identifier
-            yield! linesForChildItemsMapping items
-        ]
-
-// public so the empty can be tested
-and linesForChildItemsMapping identifiersOrItems =
-    let keyYaml = "items:"
-
+let private createKeyValueLinesMapping (key, valueLines) =
     let withoutBlock value =
-        seq [ keyYaml + " " + value ]
+        seq [ key + ": " + value ]
 
     let withBlock lines =
         seq [
-            keyYaml
+            key + ":"
             yield! lines |> indentLines
         ]
 
-    match identifiersOrItems |> linesForChildItems |> Seq.toList with
+    match valueLines with
     | [] -> seq []
     | [ singleLine ] -> singleLine |> withoutBlock
-    | lines -> lines |> withBlock
+    | _ -> valueLines |> withBlock
+
+let rec private linesForChildItems itemOrItems =
+    match itemOrItems with
+    | [] -> []
+    | [ item ] -> linesForItem item
+    | _ -> linesForItems itemOrItems |> Seq.toList
+ 
+and private linesForItems (items: Item seq) =
+    items
+    |> Seq.collect (linesForItem >> blockSequenceLines)
+
+and private linesForItem item =
+    let mappingLines =
+        [
+            yield! linesForChildItemsMapping item.Items
+        ]
+
+    match mappingLines with
+    | [] ->
+        [ item.Identifier ]
+    | _ ->
+        [
+            "id: " + item.Identifier
+            yield! mappingLines
+        ]
+
+and private linesForChildItemsMapping items =
+    createKeyValueLinesMapping(
+        "items",
+        items |> linesForChildItems
+    )
 
 let createForItems items =
     items
