@@ -1,24 +1,31 @@
 module DevSnicket.Eunice.Analysis.Files.AssemblyAnalysis
 
+open DevSnicket.Eunice.Analysis.Files.Namespaces
 open Mono.Cecil
 open System
-
-let private createItemForAndSegmentNamespaceOfType (``type``: TypeDefinition) =
-    {
-        Item = TypeItem.createItemFromType ``type``
-        NamespaceSegments = ``type``.Namespace.Split "." |> Array.toList
-    }
 
 let private isModuleType (``type``: TypeDefinition) =
     ``type``.Name = "<Module>"
     &&
     ``type``.Namespace = ""
 
+let private createItemForAndSegmentNamespaceOfType (``type``: TypeDefinition) =
+    {
+        Item = TypeItem.createItemFromType ``type``
+        Namespace = ``type``.Namespace
+    }
+
+let private createNamespaceItem namespaceItem: Item =
+    {
+        Identifier = namespaceItem.Identifier
+        Items = namespaceItem.Items
+    }
+
 let private createItemsForModule (``module``: ModuleDefinition) =
     ``module``.Types
     |> Seq.filter (isModuleType >> not)
     |> Seq.map createItemForAndSegmentNamespaceOfType
-    |> NamespaceAndTypeHierarchy.groupTypesAndNamespaceSegments
+    |> NamespaceHierarchy.groupNamespaces createNamespaceItem
 
 let analyzeAssemblyWithFilePath (assemblyFilePath: String) =
     assemblyFilePath

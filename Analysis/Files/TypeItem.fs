@@ -1,24 +1,38 @@
 module DevSnicket.Eunice.Analysis.Files.TypeItem
 
 let rec createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
-    let itemsOfType =
-        let methodsOfType =
-            match ``type``.BaseType with
-            | null -> seq []
-            | baseType when baseType.FullName = "System.MulticastDelegate" -> seq []
-            | _ -> createItemsFromMethods ``type``.Methods
+    match ``type``.BaseType with
+    | null ->
+        createItemFromEnumOrInterfaceOrClass ``type``
+    | baseType when baseType.FullName = "System.MulticastDelegate" ->
+        createItemFromDelegate ``type``
+    | _ ->
+        createItemFromEnumOrInterfaceOrClass ``type``
 
-        seq [
-            yield! ``type``.NestedTypes |> Seq.map createItemFromType 
-            yield! methodsOfType
-        ]
-        |> Seq.toList
-
+and private createItemFromEnumOrInterfaceOrClass enumOrInterfaceOrClass =
     {
-        Identifier = ``type``.Name
-        Items = itemsOfType
+        Identifier =
+            enumOrInterfaceOrClass.Name
+        Items =
+            [
+                yield! enumOrInterfaceOrClass.NestedTypes |> Seq.map createItemFromType 
+                yield! createItemsFromMethods enumOrInterfaceOrClass.Methods
+            ]
     }
 
-and private createItemsFromMethods =
-    Seq.filter (fun method -> method.IsConstructor |> not)
-    >> Seq.map (fun method -> { Identifier = method.Name; Items = [] })
+and private createItemFromDelegate ``delegate`` =
+    {
+        Identifier = ``delegate``.Name
+        Items = []
+    }
+
+and private createItemsFromMethods methods =
+    methods
+    |> Seq.filter (fun method -> method.IsConstructor |> not)
+    |> Seq.map createItemFromMethod
+
+and private createItemFromMethod method =
+    {
+        Identifier = method.Name
+        Items = []
+    }

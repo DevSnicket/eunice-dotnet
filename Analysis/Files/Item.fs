@@ -7,9 +7,3 @@ type Item =
         Identifier: String
         Items: Item list
     }
-
-type ItemWithNamespaceSegments =
-    {
-        Item: Item
-        NamespaceSegments: String list
-    }
