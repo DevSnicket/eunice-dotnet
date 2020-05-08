@@ -3,9 +3,9 @@ module DevSnicket.Eunice.Analysis.Files.AssemblyAnalysis
 open Mono.Cecil
 open System
 
-let private createIdentifierOrItemForAndSegmentNamespaceOfType (``type``: TypeDefinition) =
+let private createItemForAndSegmentNamespaceOfType (``type``: TypeDefinition) =
     {
-        IdentifierOrItem = TypeIdentifierOrItem.createIdentifierOrItemFromType ``type``
+        Item = TypeItem.createItemFromType ``type``
         NamespaceSegments = ``type``.Namespace.Split "." |> Array.toList
     }
 
@@ -14,15 +14,15 @@ let private isModuleType (``type``: TypeDefinition) =
     &&
     ``type``.Namespace = ""
 
-let private createIdentifiersAndItemsForModule (``module``: ModuleDefinition) =
+let private createItemsForModule (``module``: ModuleDefinition) =
     ``module``.Types
     |> Seq.filter (isModuleType >> not)
-    |> Seq.map createIdentifierOrItemForAndSegmentNamespaceOfType
+    |> Seq.map createItemForAndSegmentNamespaceOfType
     |> NamespaceAndTypeHierarchy.groupTypesAndNamespaceSegments
 
 let analyzeAssemblyWithFilePath (assemblyFilePath: String) =
     assemblyFilePath
     |> AssemblyDefinition.ReadAssembly
     |> fun assembly -> assembly.Modules
-    |> Seq.collect createIdentifiersAndItemsForModule
-    |> Yaml.createForIdentifiersAndItems
+    |> Seq.collect createItemsForModule
+    |> Yaml.createForItems

@@ -6,9 +6,9 @@
 		<TargetFramework>netstandard2.1</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Include="IdentifierOrItem.fs" />
+		<Compile Include="Item.fs" />
 		<Compile Include="BaseNamespace.fs" />
-		<Compile Include="TypeIdentifierOrItem.fs" />
+		<Compile Include="TypeItem.fs" />
 		<Compile Include="NamespaceAndTypeHierarchy.fs" />
 		<Compile Include="Yaml.fs" />
 		<Compile Include="AssemblyAnalysis.fs" />

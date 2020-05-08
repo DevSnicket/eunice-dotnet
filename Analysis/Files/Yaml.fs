@@ -15,26 +15,25 @@ let blockSequenceLines lines =
         ]
 
 // public so the empty can be tested
-let rec linesForChildItems identifierOrItemOrIdentifiersAndItems =
-    match identifierOrItemOrIdentifiersAndItems with
+let rec linesForChildItems itemOrItems =
+    match itemOrItems with
     | [] -> seq []
-    | [ identifierOrItem ] -> linesForIdentifierOrItem identifierOrItem
-    | _ -> linesForIdentifiersAndItems identifierOrItemOrIdentifiersAndItems
+    | [ item ] -> linesForItem item
+    | _ -> linesForItems itemOrItems
  
-and private linesForIdentifiersAndItems (identifiersAndItems: IdentifierOrItem seq) =
-    identifiersAndItems
-    |> Seq.collect (linesForIdentifierOrItem >> Seq.toList >> blockSequenceLines)
-
-and private linesForIdentifierOrItem identifierOrItem =
-    match identifierOrItem with
-    | Identifier identifier -> seq [ identifier ]
-    | Item item -> linesForItem item
+and private linesForItems (identifiers: Item seq) =
+    identifiers
+    |> Seq.collect (linesForItem >> Seq.toList >> blockSequenceLines)
 
 and private linesForItem item =
-    seq [
-        "id: " + item.Identifier
-        yield! linesForChildItemsMapping item.Items
-    ]
+    match item.Items with
+    | [] ->
+        seq [ item.Identifier ]
+    | items ->
+        seq [
+            "id: " + item.Identifier
+            yield! linesForChildItemsMapping items
+        ]
 
 // public so the empty can be tested
 and linesForChildItemsMapping identifiersOrItems =
@@ -49,12 +48,12 @@ and linesForChildItemsMapping identifiersOrItems =
             yield! lines |> indentLines
         ]
 
-    match identifiersOrItems with
+    match identifiersOrItems |> linesForChildItems |> Seq.toList with
     | [] -> seq []
-    | [ Identifier singleIdentifier ] -> singleIdentifier |> withoutBlock
-    | _ -> identifiersOrItems |> linesForChildItems |> withBlock
+    | [ singleLine ] -> singleLine |> withoutBlock
+    | lines -> lines |> withBlock
 
-let createForIdentifiersAndItems identifiersAndItems =
-    identifiersAndItems
-    |> linesForIdentifiersAndItems
+let createForItems items =
+    items
+    |> linesForItems
     |> String.concat "\n"
