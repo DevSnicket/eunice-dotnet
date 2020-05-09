@@ -1,18 +1,20 @@
 module DevSnicket.Eunice.Analysis.Files.Namespaces.NamespaceHierarchy
 
 open DevSnicket.Eunice.Analysis.Files.Namespaces.Segments
+open System
 
-let private segmentNamespace (itemAndNamespace: ItemAndNamespace<'T>) =
+type Delegates<'Item> =
     {
-        Item = itemAndNamespace.Item
-        NamespaceSegments = itemAndNamespace.Namespace.Split "." |> Array.toList
+        CreateNamespaceItem: NamespaceItem<'Item> -> 'Item
+        GetIdentifierFromItem: 'Item -> String
     }
 
-let groupNamespaceSegments createNamespaceItem =
+let groupNamespaceSegments delegates =
     let rec groupNamespaceSegments itemsAndNamespaceSegments =
         itemsAndNamespaceSegments
         |> BaseNamespace.groupItemsByBaseNamespace
         |> Seq.collect createNamespaceOrGetItems
+        |> Seq.sortBy delegates.GetIdentifierFromItem
         |> Seq.toList
 
     and createNamespaceOrGetItems (``namespace``, itemsAndNamespaceSegments) =
@@ -22,7 +24,7 @@ let groupNamespaceSegments createNamespaceItem =
             |> Seq.map(fun itemAndNamespaceSegments -> itemAndNamespaceSegments.Item)
         | _ ->
             seq [
-                createNamespaceItem({
+                delegates.CreateNamespaceItem({
                     Identifier = ``namespace``
                     Items = groupNamespaceSegments itemsAndNamespaceSegments
                 })
@@ -30,7 +32,13 @@ let groupNamespaceSegments createNamespaceItem =
 
     groupNamespaceSegments
 
-let groupNamespaces createNamespaceItem items =
+let private segmentNamespace (itemAndNamespace: ItemAndNamespace<'T>) =
+    {
+        Item = itemAndNamespace.Item
+        NamespaceSegments = itemAndNamespace.Namespace.Split "." |> Array.toList
+    }
+
+let groupNamespaces delegates items =
     items
     |> Seq.map segmentNamespace
-    |> groupNamespaceSegments createNamespaceItem
+    |> groupNamespaceSegments delegates

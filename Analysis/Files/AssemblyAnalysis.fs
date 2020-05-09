@@ -26,7 +26,11 @@ let private createItemsForModule (``module``: ModuleDefinition) =
     ``module``.Types
     |> Seq.filter (isModuleType >> not)
     |> Seq.map createItemForAndSegmentNamespaceOfType
-    |> NamespaceHierarchy.groupNamespaces createNamespaceItem
+    |> NamespaceHierarchy.groupNamespaces 
+        {
+            CreateNamespaceItem = createNamespaceItem
+            GetIdentifierFromItem = fun item -> item.Identifier
+        }
 
 let analyzeAssemblyWithFilePath (assemblyFilePath: String) =
     assemblyFilePath

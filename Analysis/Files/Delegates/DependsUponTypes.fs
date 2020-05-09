@@ -6,7 +6,11 @@ open DevSnicket.Eunice.Analysis.Files.Namespaces
 let createDependsUponFromTypes (types: Mono.Cecil.TypeReference seq): DependUpon list =
     types
     |> Seq.map createItemAndNamespaceFromType
-    |> NamespaceHierarchy.groupNamespaces createDependUponFromNamespaceItem
+    |> NamespaceHierarchy.groupNamespaces
+        {
+            CreateNamespaceItem = createDependUponFromNamespaceItem
+            GetIdentifierFromItem = fun item -> item.Identifier
+        }
 
 let private createDependUponFromNamespaceItem namespaceItem =
     {
