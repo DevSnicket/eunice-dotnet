@@ -1,4 +1,4 @@
-module rec DevSnicket.Eunice.Analysis.Files.Delegates.DependsUponTypes
+module rec DevSnicket.Eunice.Analysis.Files.Methods.DependsUponTypes
 
 open DevSnicket.Eunice.Analysis.Files
 open DevSnicket.Eunice.Analysis.Files.Namespaces

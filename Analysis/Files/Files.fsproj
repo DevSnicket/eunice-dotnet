@@ -12,9 +12,10 @@
 		<Compile Include="Namespaces/ItemAndNamespace.fs" />
 		<Compile Include="Namespaces/NamespaceItem.fs" />
 		<Compile Include="Namespaces/NamespaceHierarchy.fs" />
-		<Compile Include="Delegates/DependsUponTypes.fs" />
-		<Compile Include="Delegates/TypesInMethods.fs" />
-		<Compile Include="Delegates/Item.fs" />
+		<Compile Include="Methods/TypesReferenced.fs" />
+		<Compile Include="Methods/DependsUponTypes.fs" />
+		<Compile Include="Methods/DependsUpon.fs" />
+		<Compile Include="Delegates.fs" />
 		<Compile Include="TypeItem.fs" />
 		<Compile Include="Yaml/Indentation.fs" />
 		<Compile Include="Yaml/Mapping.fs" />

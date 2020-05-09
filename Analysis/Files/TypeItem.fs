@@ -29,7 +29,7 @@ let private createItemsFromMethods methods =
 
 let private createItemFromMethod method =
     {
-        DependsUpon = []
+        DependsUpon = Methods.DependsUpon.createDependsUponFromMethod method
         Identifier = method.Name
         Items = []
     }
