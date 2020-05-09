@@ -2,19 +2,9 @@ module DevSnicket.Eunice.Analysis.Files.Yaml.Items
 
 open DevSnicket.Eunice.Analysis.Files
 
-// public so the empty can be tested
-let blockSequenceLines lines =
-    match lines with
-    | [] -> seq []
-    | head :: tail ->
-        seq [
-            yield "- " + head
-            yield! tail |> Indentation.indentLines
-        ]
-
 let rec private linesForItems items =
     items
-    |> Seq.collect (linesForItem >> blockSequenceLines)
+    |> Seq.collect (linesForItem >> SequenceBlock.entryFromLines)
 
 and private linesForItem item =
     let mappingLines =

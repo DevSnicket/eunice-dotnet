@@ -1,30 +1,34 @@
-module DevSnicket.Eunice.Analysis.Files.Yaml.DependsUpon
+module rec DevSnicket.Eunice.Analysis.Files.Yaml.DependsUpon
 
 open DevSnicket.Eunice.Analysis.Files
 
-let rec private linesForDependsUpon dependsUpon =
-    dependsUpon
-    |> Seq.collect linesForDependUpon
-    |> Seq.toList
-
-and private linesForDependUpon (dependUpon: DependUpon) =
-    match dependUpon.Items with
-    | [] ->
-        seq [ dependUpon.Identifier ]
-    | items ->
-        seq [
-            "id: " + dependUpon.Identifier
-            yield! linesForDependUponItems items
-        ]
-
-and private linesForDependUponItems items =
-    Mapping.keyValueLinesMapping (
-        "items",
-        linesForDependsUpon items
-    )
-
-let linesForDependsUponMapping dependsUpon =
+let linesForDependsUponMapping (dependsUpon: DependUpon list) =
     Mapping.keyValueLinesMapping (
         "dependsUpon",
         linesForDependsUpon dependsUpon
+    )
+
+let private linesForDependsUpon dependsUpon =
+    match dependsUpon with
+    | [ singleDependUpon ] ->
+        linesForDependUpon singleDependUpon
+    | _ ->
+        dependsUpon
+        |> Seq.collect (linesForDependUpon >> SequenceBlock.entryFromLines)
+        |> Seq.toList
+
+let private linesForDependUpon dependUpon =
+    match dependUpon.Items with
+    | [] ->
+        [ dependUpon.Identifier ]
+    | items ->
+        [
+            "id: " + dependUpon.Identifier
+            yield! linesForDependUponItemsMapping items
+        ]
+
+let private linesForDependUponItemsMapping items =
+    Mapping.keyValueLinesMapping (
+        "items",
+        linesForDependsUpon items
     )

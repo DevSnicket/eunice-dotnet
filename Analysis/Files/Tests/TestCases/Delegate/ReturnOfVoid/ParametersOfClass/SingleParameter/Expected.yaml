@@ -1,0 +1,7 @@
+﻿- id: Namespace
+  items:
+    - id: Delegate
+      dependsUpon:
+        id: Namespace
+        items: ParameterClass
+    - ParameterClass

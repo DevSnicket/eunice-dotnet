@@ -1,0 +1,3 @@
+namespace ReturnClassNamespace {
+	class ReturnClass { }
+}

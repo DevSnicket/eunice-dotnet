@@ -1,0 +1,8 @@
+﻿- id: ReturnClassNamespace
+  items: ReturnClass
+- id: DelegateNamespace
+  items:
+    id: Delegate
+    dependsUpon:
+      id: ReturnClassNamespace
+      items: ReturnClass

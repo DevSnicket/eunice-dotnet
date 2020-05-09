@@ -1,15 +1,15 @@
-module DevSnicket.Eunice.Analysis.Files.TypeItem
+module rec DevSnicket.Eunice.Analysis.Files.TypeItem
 
-let rec createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
+let createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
     match ``type``.BaseType with
     | null ->
         createItemFromEnumOrInterfaceOrClass ``type``
     | baseType when baseType.FullName = "System.MulticastDelegate" ->
-        DelegateItem.createItemFromDelegate ``type``
+        Delegates.Item.createItemFromDelegate ``type``
     | _ ->
         createItemFromEnumOrInterfaceOrClass ``type``
 
-and private createItemFromEnumOrInterfaceOrClass enumOrInterfaceOrClass =
+let private createItemFromEnumOrInterfaceOrClass enumOrInterfaceOrClass =
     {
         DependsUpon =
             []
@@ -17,17 +17,17 @@ and private createItemFromEnumOrInterfaceOrClass enumOrInterfaceOrClass =
             enumOrInterfaceOrClass.Name
         Items =
             [
-                yield! enumOrInterfaceOrClass.NestedTypes |> Seq.map createItemFromType 
+                yield! enumOrInterfaceOrClass.NestedTypes |> Seq.map createItemFromType
                 yield! createItemsFromMethods enumOrInterfaceOrClass.Methods
             ]
     }
 
-and private createItemsFromMethods methods =
+let private createItemsFromMethods methods =
     methods
     |> Seq.filter (fun method -> method.IsConstructor |> not)
     |> Seq.map createItemFromMethod
 
-and private createItemFromMethod method =
+let private createItemFromMethod method =
     {
         DependsUpon = []
         Identifier = method.Name

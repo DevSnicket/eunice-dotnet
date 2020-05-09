@@ -1,4 +1,4 @@
-module DevSnicket.Eunice.Analysis.Files.Tests.YamlTest
+module DevSnicket.Eunice.Analysis.Files.Tests.Yaml.SequenceBlockTest
 
 open System
 
@@ -8,5 +8,5 @@ open System
 let BlockSequenceLinesOfEmpty() =
     Xunit.Assert.Equal<String seq>(
         seq [],
-        DevSnicket.Eunice.Analysis.Files.Yaml.Items.blockSequenceLines []
+        DevSnicket.Eunice.Analysis.Files.Yaml.SequenceBlock.entryFromLines []
     )
