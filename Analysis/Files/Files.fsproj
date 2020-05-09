@@ -7,13 +7,17 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="Item.fs" />
-		<Compile Include="TypeItem.fs" />
 		<Compile Include="Namespaces/Segments/ItemAndNamespaceSegments.fs" />
 		<Compile Include="Namespaces/Segments/BaseNamespace.fs" />
 		<Compile Include="Namespaces/ItemAndNamespace.fs" />
 		<Compile Include="Namespaces/NamespaceItem.fs" />
 		<Compile Include="Namespaces/NamespaceHierarchy.fs" />
-		<Compile Include="Yaml.fs" />
+		<Compile Include="DelegateItem.fs" />
+		<Compile Include="TypeItem.fs" />
+		<Compile Include="Yaml/Indentation.fs" />
+		<Compile Include="Yaml/Mapping.fs" />
+		<Compile Include="Yaml/DependsUpon.fs" />
+		<Compile Include="Yaml/Items.fs" />
 		<Compile Include="AssemblyAnalysis.fs" />
 	</ItemGroup>
 	<ItemGroup>

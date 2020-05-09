@@ -15,8 +15,9 @@ let private createItemForAndSegmentNamespaceOfType (``type``: TypeDefinition) =
         Namespace = ``type``.Namespace
     }
 
-let private createNamespaceItem namespaceItem: Item =
+let private createNamespaceItem namespaceItem =
     {
+        DependsUpon = []
         Identifier = namespaceItem.Identifier
         Items = namespaceItem.Items
     }
@@ -32,4 +33,4 @@ let analyzeAssemblyWithFilePath (assemblyFilePath: String) =
     |> AssemblyDefinition.ReadAssembly
     |> fun assembly -> assembly.Modules
     |> Seq.collect createItemsForModule
-    |> Yaml.createForItems
+    |> Yaml.Items.formatItems

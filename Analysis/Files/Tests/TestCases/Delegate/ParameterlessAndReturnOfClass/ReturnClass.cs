@@ -1,0 +1,3 @@
+namespace NamespaceOfReturnClass {
+	class ReturnClass { }
+}

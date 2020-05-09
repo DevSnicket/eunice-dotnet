@@ -5,12 +5,14 @@ let rec createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
     | null ->
         createItemFromEnumOrInterfaceOrClass ``type``
     | baseType when baseType.FullName = "System.MulticastDelegate" ->
-        createItemFromDelegate ``type``
+        DelegateItem.createItemFromDelegate ``type``
     | _ ->
         createItemFromEnumOrInterfaceOrClass ``type``
 
 and private createItemFromEnumOrInterfaceOrClass enumOrInterfaceOrClass =
     {
+        DependsUpon =
+            []
         Identifier =
             enumOrInterfaceOrClass.Name
         Items =
@@ -20,12 +22,6 @@ and private createItemFromEnumOrInterfaceOrClass enumOrInterfaceOrClass =
             ]
     }
 
-and private createItemFromDelegate ``delegate`` =
-    {
-        Identifier = ``delegate``.Name
-        Items = []
-    }
-
 and private createItemsFromMethods methods =
     methods
     |> Seq.filter (fun method -> method.IsConstructor |> not)
@@ -33,6 +29,7 @@ and private createItemsFromMethods methods =
 
 and private createItemFromMethod method =
     {
+        DependsUpon = []
         Identifier = method.Name
         Items = []
     }

@@ -1,0 +1,8 @@
+﻿- id: NamespaceOfReturnClass
+  items: ReturnClass
+- id: NamespaceOfDelegate
+  items:
+    id: Delegate
+    dependsUpon:
+      id: NamespaceOfReturnClass
+      items: ReturnClass
