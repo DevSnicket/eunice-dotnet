@@ -12,8 +12,8 @@
 		<Compile Include="Namespaces/ItemAndNamespace.fs" />
 		<Compile Include="Namespaces/NamespaceItem.fs" />
 		<Compile Include="Namespaces/NamespaceHierarchy.fs" />
+		<Compile Include="DependsUponTypes.fs" />
 		<Compile Include="Methods/TypesReferenced.fs" />
-		<Compile Include="Methods/DependsUponTypes.fs" />
 		<Compile Include="Methods/DependsUpon.fs" />
 		<Compile Include="Delegates.fs" />
 		<Compile Include="TypeItem.fs" />

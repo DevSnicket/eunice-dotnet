@@ -1,6 +1,5 @@
-module rec DevSnicket.Eunice.Analysis.Files.Methods.DependsUponTypes
+module rec DevSnicket.Eunice.Analysis.Files.DependsUponTypes
 
-open DevSnicket.Eunice.Analysis.Files
 open DevSnicket.Eunice.Analysis.Files.Namespaces
 
 let createDependsUponFromTypes (types: Mono.Cecil.TypeReference seq): DependUpon list =

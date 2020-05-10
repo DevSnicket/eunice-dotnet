@@ -3,24 +3,25 @@ module rec DevSnicket.Eunice.Analysis.Files.TypeItem
 let createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
     match ``type``.BaseType with
     | null ->
-        createItemFromEnumOrInterfaceOrClass ``type``
+        {
+            DependsUpon = []
+            Identifier = ``type``.Name
+            Items = createItemsFromType ``type``
+        }
     | baseType when baseType.FullName = "System.MulticastDelegate" ->
         Delegates.Item.createItemFromDelegate ``type``
-    | _ ->
-        createItemFromEnumOrInterfaceOrClass ``type``
+    | baseType ->
+        {
+            DependsUpon = createDependsUponFromBaseType baseType
+            Identifier = ``type``.Name
+            Items = createItemsFromType ``type``
+        }
 
-let private createItemFromEnumOrInterfaceOrClass enumOrInterfaceOrClass =
-    {
-        DependsUpon =
-            []
-        Identifier =
-            enumOrInterfaceOrClass.Name
-        Items =
-            [
-                yield! enumOrInterfaceOrClass.NestedTypes |> Seq.map createItemFromType
-                yield! createItemsFromMethods enumOrInterfaceOrClass.Methods
-            ]
-    }
+let private createItemsFromType ``type`` =
+    [
+        yield! ``type``.NestedTypes |> Seq.map createItemFromType
+        yield! createItemsFromMethods ``type``.Methods
+    ]
 
 let private createItemsFromMethods methods =
     methods
@@ -33,3 +34,13 @@ let private createItemFromMethod method =
         Identifier = method.Name
         Items = []
     }
+
+let private createDependsUponFromBaseType baseType =
+    let isRelevant =
+        [ "System.Enum"; "System.Object" ]
+        |> List.contains baseType.FullName
+        |> not
+
+    match isRelevant with
+    | false -> []
+    | true -> DependsUponTypes.createDependsUponFromTypes [ baseType ]
