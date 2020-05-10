@@ -1,0 +1,12 @@
+﻿- id: Namespace
+  items:
+    - id: DerivedClass
+      dependsUpon:
+        id: Namespace
+        items:
+          - Interface1
+          - Interface2
+          - ZBaseClass
+    - Interface1
+    - Interface2
+    - ZBaseClass

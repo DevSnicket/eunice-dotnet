@@ -1,0 +1,7 @@
+﻿- id: Namespace
+  items:
+    - BaseInterface
+    - id: DerivedInterface
+      dependsUpon:
+        id: Namespace
+        items: BaseInterface

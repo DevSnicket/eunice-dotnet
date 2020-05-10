@@ -1,0 +1,7 @@
+﻿- id: Namespace
+  items:
+    - id: Class
+      dependsUpon:
+        id: Namespace
+        items: Interface
+    - Interface
