@@ -1,5 +1,3 @@
-namespace Namespace {
-	class Class { 
-		void Method() { }
-	}
+class Class { 
+	void Method() { }
 }

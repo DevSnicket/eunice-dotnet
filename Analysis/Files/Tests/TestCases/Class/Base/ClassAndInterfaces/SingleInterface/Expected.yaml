@@ -1,10 +1,6 @@
-﻿- id: Namespace
-  items:
+﻿- BaseClass
+- id: DerivedClass
+  dependsUpon:
     - BaseClass
-    - id: DerivedClass
-      dependsUpon:
-        id: Namespace
-        items:
-          - BaseClass
-          - Interface
     - Interface
+- Interface

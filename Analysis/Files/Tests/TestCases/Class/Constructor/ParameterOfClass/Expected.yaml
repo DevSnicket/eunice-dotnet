@@ -1,9 +1,5 @@
-﻿- id: Namespace
+﻿- id: Class
   items:
-    - id: Class
-      items:
-        id: .ctor
-        dependsUpon:
-          id: Namespace
-          items: ParameterClass
-    - ParameterClass
+    id: .ctor
+    dependsUpon: ParameterClass
+- ParameterClass

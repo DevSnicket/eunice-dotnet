@@ -1,4 +1,2 @@
-﻿- id: Namespace
-  items:
-    id: Interface
-    items: NestedClass
+﻿- id: Interface
+  items: NestedClass

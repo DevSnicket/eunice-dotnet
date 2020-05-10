@@ -1,4 +1,1 @@
-namespace Namespace {
-	enum Enum {
-	}
-}
+enum Enum { }

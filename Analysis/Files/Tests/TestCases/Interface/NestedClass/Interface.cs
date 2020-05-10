@@ -1,5 +1,3 @@
-namespace Namespace {
-	interface Interface {
-		class NestedClass { }
-	}
+interface Interface {
+	class NestedClass { }
 }

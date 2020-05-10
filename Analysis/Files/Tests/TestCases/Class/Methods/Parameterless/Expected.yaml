@@ -1,4 +1,2 @@
-﻿- id: Namespace
-  items:
-    id: Class
-    items: Method
+﻿- id: Class
+  items: Method

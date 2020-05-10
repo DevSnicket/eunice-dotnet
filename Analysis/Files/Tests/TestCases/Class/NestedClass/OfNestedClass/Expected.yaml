@@ -1,6 +1,4 @@
-﻿- id: Namespace
+﻿- id: Class
   items:
-    id: Class
-    items:
-      id: ParentNestedClass
-      items: ChildNestedClass
+    id: ParentNestedClass
+    items: ChildNestedClass

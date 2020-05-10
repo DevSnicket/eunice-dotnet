@@ -1,5 +1,3 @@
-namespace Namespace {
-	interface Interface { 
-		void Method() { }
-	}
+interface Interface { 
+	void Method() { }
 }

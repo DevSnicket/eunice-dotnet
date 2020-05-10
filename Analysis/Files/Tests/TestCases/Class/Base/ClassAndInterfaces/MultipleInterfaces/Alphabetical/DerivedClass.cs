@@ -1,3 +1,1 @@
-namespace Namespace {
-	class DerivedClass : BaseClass, Interface1, Interface2 { }
-}
+class DerivedClass : BaseClass, Interface1, Interface2 { }

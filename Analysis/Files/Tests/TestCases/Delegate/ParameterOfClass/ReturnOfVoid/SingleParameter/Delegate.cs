@@ -1,3 +1,1 @@
-namespace Namespace {
-	delegate void Delegate(ParameterClass parameter);
-}
+delegate void Delegate(ParameterClass parameter);

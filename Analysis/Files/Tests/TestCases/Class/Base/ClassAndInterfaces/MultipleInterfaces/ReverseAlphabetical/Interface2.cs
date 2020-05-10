@@ -1,3 +1,1 @@
-namespace Namespace {
-	interface Interface2 { }
-}
+interface Interface2 { }

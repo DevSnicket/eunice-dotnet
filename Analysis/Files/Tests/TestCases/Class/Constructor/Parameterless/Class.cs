@@ -1,5 +1,3 @@
-namespace Namespace {
-	class Class {
-		Class() { }
-	}
+class Class {
+	Class() { }
 }

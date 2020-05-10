@@ -1,3 +1,1 @@
-namespace Namespace {
-	class ParameterClass { }
-}
+class ParameterClass { }

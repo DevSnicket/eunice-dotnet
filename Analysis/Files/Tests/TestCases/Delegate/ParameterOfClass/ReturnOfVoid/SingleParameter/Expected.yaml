@@ -1,7 +1,3 @@
-﻿- id: Namespace
-  items:
-    - id: Delegate
-      dependsUpon:
-        id: Namespace
-        items: ParameterClass
-    - ParameterClass
+﻿- id: Delegate
+  dependsUpon: ParameterClass
+- ParameterClass

@@ -1,3 +1,1 @@
-namespace Namespace {
-	class ZBaseClass { }
-}
+class ZBaseClass { }

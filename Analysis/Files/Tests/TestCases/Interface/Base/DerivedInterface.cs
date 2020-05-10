@@ -1,3 +1,1 @@
-namespace Namespace {
-	interface DerivedInterface : BaseInterface { }
-}
+interface DerivedInterface : BaseInterface { }

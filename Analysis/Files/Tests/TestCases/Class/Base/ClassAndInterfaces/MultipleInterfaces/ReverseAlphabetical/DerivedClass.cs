@@ -1,3 +1,1 @@
-namespace Namespace {
-	class DerivedClass : ZBaseClass, Interface2, Interface1 { }
-}
+class DerivedClass : ZBaseClass, Interface2, Interface1 { }
