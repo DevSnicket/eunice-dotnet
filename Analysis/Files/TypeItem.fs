@@ -45,17 +45,20 @@ let private isDependUponTypeRelevant ``type`` =
 let private createItemsFromType ``type`` =
     [
         yield! ``type``.NestedTypes |> Seq.map createItemFromType
-        yield! createItemsFromMethods ``type``.Methods
+        yield! ``type``.Methods |> Seq.collect createItemsFromMethod
     ]
 
-let private createItemsFromMethods methods =
-    methods
-    |> Seq.filter (fun method -> method.IsConstructor |> not)
-    |> Seq.map createItemFromMethod
+let private createItemsFromMethod method =
+    let dependsUpon = method |> Methods.DependsUpon.createDependsUponFromMethod
 
-let private createItemFromMethod method =
-    {
-        DependsUpon = Methods.DependsUpon.createDependsUponFromMethod method
-        Identifier = method.Name
-        Items = []
-    }
+    match (dependsUpon, method.IsConstructor) with
+    | ([], true) ->
+        seq []
+    | _ ->
+        seq [
+            {
+                DependsUpon = dependsUpon
+                Identifier = method.Name
+                Items = []
+            }
+        ]

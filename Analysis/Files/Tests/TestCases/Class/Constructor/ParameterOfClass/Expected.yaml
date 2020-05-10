@@ -1,0 +1,9 @@
+﻿- id: Namespace
+  items:
+    - id: Class
+      items:
+        id: .ctor
+        dependsUpon:
+          id: Namespace
+          items: ParameterClass
+    - ParameterClass
