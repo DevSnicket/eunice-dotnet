@@ -1,4 +1,4 @@
-module DevSnicket.Eunice.Analysis.Files.Namespaces.Segments.BaseNamespace
+module rec DevSnicket.Eunice.Analysis.Files.Namespaces.Segments.BaseNamespace
 
 open System
 
@@ -7,6 +7,18 @@ type private ItemAndBaseNamespace<'Item> =
         BaseNamespace: String
         ItemAndNamespaceSegments: ItemAndNamespaceSegments<'Item>
     }
+
+let groupItemsByBaseNamespace items =
+    items
+    |> Seq.map dequeueBaseNamespaceFromItem
+    |> Seq.groupBy (fun item -> item.BaseNamespace)
+    |> Seq.map (
+        fun (baseNamespace, itemsAndBaseNamespaces) ->
+            (
+                baseNamespace,
+                itemsAndBaseNamespaces |> Seq.map(fun itemAndBaseNamespace -> itemAndBaseNamespace.ItemAndNamespaceSegments)
+            )
+        )
 
 let private dequeueBaseNamespaceFromItem itemAndNamespaceSegments =
     match itemAndNamespaceSegments.NamespaceSegments with
@@ -20,15 +32,3 @@ let private dequeueBaseNamespaceFromItem itemAndNamespaceSegments =
             BaseNamespace = ""
             ItemAndNamespaceSegments = itemAndNamespaceSegments
         }
-
-let groupItemsByBaseNamespace items =
-    items
-    |> Seq.map dequeueBaseNamespaceFromItem
-    |> Seq.groupBy (fun item -> item.BaseNamespace)
-    |> Seq.map (
-        fun (baseNamespace, itemsAndBaseNamespaces) ->
-            (
-                baseNamespace,
-                itemsAndBaseNamespaces |> Seq.map(fun itemAndBaseNamespace -> itemAndBaseNamespace.ItemAndNamespaceSegments)
-            )
-        )

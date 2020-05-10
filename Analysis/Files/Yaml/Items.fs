@@ -1,12 +1,17 @@
-module DevSnicket.Eunice.Analysis.Files.Yaml.Items
+module rec DevSnicket.Eunice.Analysis.Files.Yaml.Items
 
 open DevSnicket.Eunice.Analysis.Files
 
-let rec private linesForItems items =
+let formatItems items =
+    items
+    |> linesForItems
+    |> String.concat "\n"
+
+let private linesForItems items =
     items
     |> Seq.collect (linesForItem >> SequenceBlock.entryFromLines)
 
-and private linesForItem item =
+let private linesForItem item =
     let mappingLines =
         [
             yield! DependsUpon.linesForDependsUponMapping item.DependsUpon
@@ -22,7 +27,7 @@ and private linesForItem item =
             yield! mappingLines
         ]
 
-and private linesForChildItemsMapping itemOrItems =
+let private linesForChildItemsMapping itemOrItems =
     let valueLines =
         match itemOrItems with
         | [] -> []
@@ -30,8 +35,3 @@ and private linesForChildItemsMapping itemOrItems =
         | _ -> linesForItems itemOrItems |> Seq.toList
 
     Mapping.keyValueLinesMapping ("items", valueLines)
-
-let formatItems items =
-    items
-    |> linesForItems
-    |> String.concat "\n"
