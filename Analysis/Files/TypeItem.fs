@@ -61,6 +61,7 @@ let private createItemsFromType ``type`` =
         yield! ``type``.Fields |> Seq.map createItemFromField
         yield! ``type``.NestedTypes |> Seq.map createItemFromType
         yield! ``type``.Methods |> Seq.collect createItemsFromMethod
+        yield! ``type``.Properties |> Seq.map createItemFromProperty
     ]
 
 let private createItemFromField field =
@@ -75,16 +76,30 @@ let private createItemFromField field =
     }
 
 let private createItemsFromMethod method =
-    let dependsUpon = method |> Methods.DependsUpon.createDependsUponFromMethod
-
-    match (dependsUpon, method.IsConstructor) with
-    | ([], true) ->
+    if method.IsGetter || method.IsSetter then
         seq []
-    | _ ->
-        seq [
-            {
-                DependsUpon = dependsUpon
-                Identifier = method.Name
-                Items = []
-            }
-        ]
+    else
+        let dependsUpon = method |> Methods.DependsUpon.createDependsUponFromMethod
+        
+        match (dependsUpon, method.IsConstructor) with
+        | ([], true) ->
+            seq []
+        | _ ->
+            seq [
+                {
+                    DependsUpon = dependsUpon
+                    Identifier = method.Name
+                    Items = []
+                }
+            ]
+
+let private createItemFromProperty property =
+    {
+        DependsUpon =
+            [ property.PropertyType ]
+            |> DependsUponTypes.createDependsUponFromTypes
+        Identifier =
+            property.Name
+        Items =
+            []
+    }
