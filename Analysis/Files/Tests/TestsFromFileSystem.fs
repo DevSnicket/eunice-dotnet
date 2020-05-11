@@ -7,15 +7,18 @@ let testCases = TestCases.Parameters.createParameters
 [<Xunit.Theory(DisplayName = "runTestsFromFileSystem")>]
 [<Xunit.MemberData("testCases")>]
 let runTestsFromFileSystem configuration directory =
-    let loadExpected =
-        Path.Join(directory, "Expected.yaml")
-        |> File.ReadAllText
+    let expectedPath =
+        match Path.Join(directory, "Expected." + configuration + ".yaml") with
+        | path when path |> File.Exists ->
+            path
+        | _ ->
+            Path.Join(directory, "Expected.yaml")
 
-    let analyzeProject =
+    let actual =
         Path.Join(directory, "bin", configuration, "TestCase.dll")
         |> DevSnicket.Eunice.Analysis.Files.AssemblyAnalysis.analyzeAssemblyWithFilePath
 
     Xunit.Assert.Equal(
-        loadExpected,
-        analyzeProject
+        expectedPath |> File.ReadAllText,
+        actual
     )
