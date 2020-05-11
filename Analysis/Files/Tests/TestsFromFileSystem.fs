@@ -4,7 +4,7 @@ open System.IO
 
 let testCases = TestCases.Parameters.createParameters
 
-[<Xunit.Theory>]
+[<Xunit.Theory(DisplayName = "runTestsFromFileSystem")>]
 [<Xunit.MemberData("testCases")>]
 let runTestsFromFileSystem configuration directory =
     let loadExpected =
