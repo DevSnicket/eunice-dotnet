@@ -20,6 +20,7 @@ let createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
             DependsUpon =
                 seq [
                     baseType;
+                    yield! ``type``.GenericParameters |> getTypesOfGenericParameters
                     yield! ``type``.Interfaces |> getTypesOfInterfaces
                 ]
                 |> createDependsUponFromReferencedTypes
@@ -28,6 +29,13 @@ let createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
             Items =
                 ``type`` |> createItemsFromType
         }
+
+let private getTypesOfGenericParameters parameters =
+    parameters
+    |> Seq.collect (fun parameter -> parameter.Constraints |> getTypesOfGenericConstraints)
+
+let private getTypesOfGenericConstraints =
+    Seq.map (fun ``constraint`` -> ``constraint``.ConstraintType)
 
 let private getTypesOfInterfaces =
     Seq.map (fun ``interface`` -> ``interface``.InterfaceType)
