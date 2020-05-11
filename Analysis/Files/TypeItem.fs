@@ -13,6 +13,12 @@ let createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
             Items =
                 ``type`` |> createItemsFromType
         }
+    | baseType when baseType.FullName = "System.Enum" ->
+        {
+            DependsUpon = []
+            Identifier = ``type``.Name
+            Items = []
+        }
     | baseType when baseType.FullName = "System.MulticastDelegate" ->
         Delegates.Item.createItemFromDelegate ``type``
     | baseType ->
@@ -52,9 +58,21 @@ let private isDependUponTypeRelevant ``type`` =
 
 let private createItemsFromType ``type`` =
     [
+        yield! ``type``.Fields |> Seq.map createItemFromField
         yield! ``type``.NestedTypes |> Seq.map createItemFromType
         yield! ``type``.Methods |> Seq.collect createItemsFromMethod
     ]
+
+let private createItemFromField field =
+    {
+        DependsUpon =
+            [ field.FieldType ]
+            |> DependsUponTypes.createDependsUponFromTypes
+        Identifier =
+            field.Name
+        Items =
+            []
+    }
 
 let private createItemsFromMethod method =
     let dependsUpon = method |> Methods.DependsUpon.createDependsUponFromMethod
