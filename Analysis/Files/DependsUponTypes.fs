@@ -4,7 +4,7 @@ open DevSnicket.Eunice.Analysis.Files.Namespaces
 
 let createDependsUponFromTypes (types: Mono.Cecil.TypeReference seq): DependUpon list =
     types
-    |> Seq.map createItemAndNamespaceFromType
+    |> Seq.collect createItemsAndNamespacesFromTypeAndGenericArguments
     |> NamespaceHierarchy.groupNamespaces
         {
             CreateNamespaceItem = createDependUponFromNamespaceItem
@@ -16,6 +16,17 @@ let private createDependUponFromNamespaceItem namespaceItem =
         Identifier = namespaceItem.Identifier
         Items = namespaceItem.Items
     }
+
+let private createItemsAndNamespacesFromTypeAndGenericArguments ``type`` =
+    match ``type`` with
+    | :? Mono.Cecil.GenericInstanceType as genericType ->
+        seq [
+            ``type``;
+            yield! genericType.GenericArguments
+        ]
+        |> Seq.map createItemAndNamespaceFromType
+    | _ ->
+        seq [ ``type`` |> createItemAndNamespaceFromType ]
 
 let private createItemAndNamespaceFromType ``type`` =
     {
