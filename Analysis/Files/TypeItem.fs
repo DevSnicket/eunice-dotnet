@@ -59,7 +59,7 @@ let private isDependUponTypeRelevant ``type`` =
 let private createItemsFromType ``type`` =
     [
         yield! ``type``.Events |> Seq.map createItemFromEvent
-        yield! ``type``.Fields |> Seq.collect createItemsFromField
+        yield! ``type``.Fields |> createItemsFromFieldsExceptEvents ``type``.Events
         yield! ``type``.NestedTypes |> Seq.map createItemFromType
         yield! ``type``.Methods |> Seq.collect createItemsFromMethod
         yield! ``type``.Properties |> Seq.map createItemFromProperty
@@ -75,6 +75,10 @@ let private createItemFromEvent event =
         Items =
             []
     }
+
+let private createItemsFromFieldsExceptEvents events =
+    Seq.filter (fun field -> events |> Seq.forall (fun event -> event.Name <> field.Name))
+    >> Seq.collect createItemsFromField
 
 let private createItemsFromField field =
     match field.Name.StartsWith("<Property>k__") with
