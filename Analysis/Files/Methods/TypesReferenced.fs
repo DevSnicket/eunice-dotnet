@@ -1,11 +1,15 @@
 module rec DevSnicket.Eunice.Analysis.Files.Methods.TypesReferenced
 
 let getTypesReferencedByMethod (method: Mono.Cecil.MethodDefinition) =
+    let isDeclaringType (``type``: Mono.Cecil.TypeReference) =
+        ``type``.FullName = method.DeclaringType.FullName
+
     seq [
         yield! method.Parameters |> Seq.map getTypeFromParameter
         yield! method.ReturnType |> getTypesFromReturnType
         yield! method.Body |> getTypesFromBody
     ]
+    |> Seq.filter (isDeclaringType >> not)
     |> distinctTypes
 
 let private getTypeFromParameter parameter =
