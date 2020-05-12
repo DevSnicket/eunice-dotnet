@@ -59,7 +59,7 @@ let private isDependUponTypeRelevant ``type`` =
 let private createItemsFromType ``type`` =
     [
         yield! ``type``.Events |> Seq.map createItemFromEvent
-        yield! ``type``.Fields |> Seq.map createItemFromField
+        yield! ``type``.Fields |> Seq.collect createItemsFromField
         yield! ``type``.NestedTypes |> Seq.map createItemFromType
         yield! ``type``.Methods |> Seq.collect createItemsFromMethod
         yield! ``type``.Properties |> Seq.map createItemFromProperty
@@ -76,16 +76,20 @@ let private createItemFromEvent event =
             []
     }
 
-let private createItemFromField field =
-    {
-        DependsUpon =
-            [ field.FieldType ]
-            |> DependsUponTypes.createDependsUponFromTypes
-        Identifier =
-            field.Name
-        Items =
-            []
-    }
+let private createItemsFromField field =
+    match field.Name.StartsWith("<Property>k__") with
+    | true ->
+        seq []
+    | false ->
+        seq [ {
+            DependsUpon =
+                [ field.FieldType ]
+                |> DependsUponTypes.createDependsUponFromTypes
+            Identifier =
+                field.Name
+            Items =
+                []
+        } ]
 
 let private createItemsFromMethod method =
     let isEvent = method.IsAddOn || method.IsRemoveOn
