@@ -58,11 +58,23 @@ let private isDependUponTypeRelevant ``type`` =
 
 let private createItemsFromType ``type`` =
     [
+        yield! ``type``.Events |> Seq.map createItemFromEvent
         yield! ``type``.Fields |> Seq.map createItemFromField
         yield! ``type``.NestedTypes |> Seq.map createItemFromType
         yield! ``type``.Methods |> Seq.collect createItemsFromMethod
         yield! ``type``.Properties |> Seq.map createItemFromProperty
     ]
+
+let private createItemFromEvent event =
+    {
+        DependsUpon =
+            [ event.EventType ]
+            |> DependsUponTypes.createDependsUponFromTypes
+        Identifier =
+            event.Name
+        Items =
+            []
+    }
 
 let private createItemFromField field =
     {
@@ -76,7 +88,10 @@ let private createItemFromField field =
     }
 
 let private createItemsFromMethod method =
-    if method.IsGetter || method.IsSetter then
+    let isEvent = method.IsAddOn || method.IsRemoveOn
+    let isProperty = method.IsGetter || method.IsSetter
+
+    if isEvent || isProperty then
         seq []
     else
         let dependsUpon = method |> Methods.DependsUpon.createDependsUponFromMethod
