@@ -1,10 +1,10 @@
-module DevSnicket.Eunice.Analysis.Files.Tests.TestsFromFileSystem
+module rec DevSnicket.Eunice.Analysis.Files.Tests.TestsFromFileSystem
 
 open System.IO
 
 let testCases = TestCases.Parameters.createParameters
 
-[<Xunit.Theory(DisplayName = "runTestsFromFileSystem")>]
+[<Xunit.Theory>]
 [<Xunit.MemberData("testCases")>]
 let runTestsFromFileSystem configuration directory =
     let expectedPath =
@@ -18,7 +18,8 @@ let runTestsFromFileSystem configuration directory =
         Path.Join(directory, "bin", configuration, "TestCase.dll")
         |> DevSnicket.Eunice.Analysis.Files.AssemblyAnalysis.analyzeAssemblyWithFilePath
 
-    Xunit.Assert.Equal(
-        expectedPath |> File.ReadAllText,
-        actual
-    )
+    let expected =
+        expectedPath |> File.ReadAllText
+
+    if actual <> expected then
+        raise (Xunit.Sdk.AssertActualExpectedException("\n" + expected, "\n" + actual, directory))
