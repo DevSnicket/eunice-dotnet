@@ -29,6 +29,6 @@ let private getReferencesFromBody body =
         seq []
     | _ ->
         seq [
-            yield! body.Instructions |> Seq.collect Instructions.getMethodsUsedByInstruction
+            yield! body.Instructions |> Seq.choose Instructions.getMethodUsedByInstruction
             yield! body.Variables |> Seq.map (fun variable -> TypeReference variable.VariableType)
         ]
