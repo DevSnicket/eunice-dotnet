@@ -1,4 +1,4 @@
-module rec DevSnicket.Eunice.Analysis.Files.TypeItem
+module rec DevSnicket.Eunice.Analysis.Files.TypeItems
 
 let createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
     match ``type``.BaseType with
@@ -7,7 +7,7 @@ let createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
             DependsUpon =
                 ``type``.Interfaces
                 |> getTypesOfInterfaces
-                |> createDependsUponFromReferencedTypes
+                |> createDependsUponFromTypes
             Identifier =
                 ``type``.Name
             Items =
@@ -29,7 +29,7 @@ let createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
                     yield! ``type``.GenericParameters |> getTypesOfGenericParameters
                     yield! ``type``.Interfaces |> getTypesOfInterfaces
                 ]
-                |> createDependsUponFromReferencedTypes
+                |> createDependsUponFromTypes
             Identifier =
                 ``type``.Name
             Items =
@@ -46,16 +46,6 @@ let private getTypesOfGenericConstraints =
 let private getTypesOfInterfaces =
     Seq.map (fun ``interface`` -> ``interface``.InterfaceType)
 
-let private createDependsUponFromReferencedTypes types =
-    types
-    |> Seq.filter isDependUponTypeRelevant
-    |> DependsUponTypes.createDependsUponFromTypes
-
-let private isDependUponTypeRelevant ``type`` =
-    [ "System.Enum"; "System.Object" ]
-    |> List.contains ``type``.FullName
-    |> not
-
 let private createItemsFromType ``type`` =
     [
         yield! ``type``.Events |> Seq.map createItemFromEvent
@@ -69,7 +59,7 @@ let private createItemFromEvent event =
     {
         DependsUpon =
             [ event.EventType ]
-            |> DependsUponTypes.createDependsUponFromTypes
+            |> createDependsUponFromTypes
         Identifier =
             event.Name
         Items =
@@ -88,7 +78,7 @@ let private createItemsFromField field =
         seq [ {
             DependsUpon =
                 [ field.FieldType ]
-                |> DependsUponTypes.createDependsUponFromTypes
+                |> createDependsUponFromTypes
             Identifier =
                 field.Name
             Items =
@@ -101,28 +91,55 @@ let private createItemsFromMethod method =
 
     if isEvent || isProperty then
         seq []
+    else if method.IsConstructor then
+        createItemsFromConstructor method
     else
-        let dependsUpon = method |> Methods.DependsUpon.createDependsUponFromMethod
-        
-        match (dependsUpon, method.IsConstructor) with
-        | ([], true) ->
-            seq []
-        | _ ->
-            seq [
-                {
-                    DependsUpon = dependsUpon
-                    Identifier = method.Name
-                    Items = []
-                }
-            ]
+        seq [ {
+            DependsUpon =
+                method
+                |> Methods.References.getReferencesOfMethod
+                |> DependsUponReferences.createDependsUponFromReferences
+            Identifier =
+                method.Name
+            Items =
+                []
+        } ]
+
+let private createItemsFromConstructor constructor =
+    let dependsUpon =
+        constructor
+        |> Methods.References.getReferencesOfMethod
+        |> Seq.filter (isReferenceToParameterlessConstructor >> not)
+        |> DependsUponReferences.createDependsUponFromReferences
+    
+    match dependsUpon with
+    | [] ->
+        seq []
+    | _ ->
+        seq [ {
+            DependsUpon = dependsUpon
+            Identifier = constructor.Name
+            Items = []
+        } ]
+
+let private isReferenceToParameterlessConstructor reference =
+    match reference with
+    | MethodReference method ->
+        method.Name = ".ctor" && method.Parameters.Count = 0
+    | TypeReference _ ->
+        false
 
 let private createItemFromProperty property =
     {
         DependsUpon =
             [ property.PropertyType ]
-            |> DependsUponTypes.createDependsUponFromTypes
+            |> createDependsUponFromTypes
         Identifier =
             property.Name
         Items =
             []
     }
+
+let private createDependsUponFromTypes =
+    Seq.map TypeReference
+    >> DependsUponReferences.createDependsUponFromReferences

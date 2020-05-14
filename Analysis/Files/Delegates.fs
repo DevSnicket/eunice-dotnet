@@ -12,7 +12,8 @@ let createItemFromDelegate (``delegate``: Mono.Cecil.TypeDefinition) =
 let private createDependsUponFromMethods methods =
     methods
     |> Seq.find isInvokeMethod
-    |> Methods.DependsUpon.createDependsUponFromMethod
+    |> Methods.References.getReferencesOfMethod
+    |> DependsUponReferences.createDependsUponFromReferences
 
 let private isInvokeMethod method =
     method.Name = "Invoke"

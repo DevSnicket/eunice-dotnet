@@ -23,7 +23,7 @@ let private createItemsForModule ``module`` =
 
 let private createItemForAndSegmentNamespaceOfType ``type`` =
     {
-        Item = TypeItem.createItemFromType ``type``
+        Item = TypeItems.createItemFromType ``type``
         Namespace = ``type``.Namespace
     }
 
