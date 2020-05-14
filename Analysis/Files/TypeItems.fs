@@ -2,39 +2,31 @@ module rec DevSnicket.Eunice.Analysis.Files.TypeItems
 
 let createItemFromType (``type``: Mono.Cecil.TypeDefinition) =
     match ``type``.BaseType with
-    | null ->
-        {
-            DependsUpon =
-                ``type``.Interfaces
-                |> getTypesOfInterfaces
-                |> createDependsUponFromTypes
-            Identifier =
-                ``type``.Name
-            Items =
-                ``type`` |> createItemsFromType
-        }
+    | null -> ``type`` |> createItemFromClassOrInterface
+    | baseType when baseType.FullName = "System.MulticastDelegate" ->
+        Delegates.Item.createItemFromDelegate ``type``
     | baseType when baseType.FullName = "System.Enum" ->
         {
             DependsUpon = []
             Identifier = ``type``.Name
             Items = []
         }
-    | baseType when baseType.FullName = "System.MulticastDelegate" ->
-        Delegates.Item.createItemFromDelegate ``type``
-    | baseType ->
-        {
-            DependsUpon =
-                seq [
-                    baseType;
-                    yield! ``type``.GenericParameters |> getTypesOfGenericParameters
-                    yield! ``type``.Interfaces |> getTypesOfInterfaces
-                ]
-                |> createDependsUponFromTypes
-            Identifier =
-                ``type``.Name
-            Items =
-                ``type`` |> createItemsFromType
-        }
+    | _ -> ``type`` |> createItemFromClassOrInterface
+
+let private createItemFromClassOrInterface ``type`` =
+    {
+        DependsUpon =
+            seq [
+                if ``type``.BaseType <> null then ``type``.BaseType
+                yield! ``type``.GenericParameters |> getTypesOfGenericParameters
+                yield! ``type``.Interfaces |> getTypesOfInterfaces
+            ]
+            |> createDependsUponFromTypes
+        Identifier =
+            ``type``.Name
+        Items =
+            ``type`` |> createItemsFromType
+    }
 
 let private getTypesOfGenericParameters parameters =
     parameters
