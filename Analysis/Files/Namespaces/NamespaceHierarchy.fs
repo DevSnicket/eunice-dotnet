@@ -32,13 +32,13 @@ let groupNamespaceSegments delegates =
         match ``namespace`` with
         | "" ->
             itemsAndNamespaceSegments
-            |> Seq.map(fun itemAndNamespaceSegments -> itemAndNamespaceSegments.Item)
+            |> Seq.map (fun itemAndNamespaceSegments -> itemAndNamespaceSegments.Item)
         | _ ->
             seq [
-                delegates.CreateNamespaceItem({
+                delegates.CreateNamespaceItem {
                     Identifier = ``namespace``
                     Items = groupNamespaceSegments itemsAndNamespaceSegments
-                })
+                }
             ]
 
     groupNamespaceSegments

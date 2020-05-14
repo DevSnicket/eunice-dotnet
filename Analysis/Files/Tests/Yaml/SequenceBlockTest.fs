@@ -5,7 +5,7 @@ open System
 // following behaviour is impossible to recreate in file-system/integration test cases
 
 [<Xunit.Fact>]
-let BlockSequenceLinesOfEmpty() =
+let BlockSequenceLinesOfEmpty () =
     Xunit.Assert.Equal<String seq>(
         seq [],
         DevSnicket.Eunice.Analysis.Files.Yaml.SequenceBlock.entryFromLines []

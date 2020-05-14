@@ -16,7 +16,7 @@ let groupItemsByBaseNamespace items =
         fun (baseNamespace, itemsAndBaseNamespaces) ->
             (
                 baseNamespace,
-                itemsAndBaseNamespaces |> Seq.map(fun itemAndBaseNamespace -> itemAndBaseNamespace.ItemAndNamespaceSegments)
+                itemsAndBaseNamespaces |> Seq.map (fun itemAndBaseNamespace -> itemAndBaseNamespace.ItemAndNamespaceSegments)
             )
         )
 

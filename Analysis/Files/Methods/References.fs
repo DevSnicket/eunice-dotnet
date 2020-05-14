@@ -16,12 +16,12 @@ let getReferencesOfMethod (method: Mono.Cecil.MethodDefinition) =
     |> Seq.filter (isDeclaringType >> not)
 
 let private getTypeFromParameter parameter =
-    TypeReference(parameter.ParameterType)
+    TypeReference parameter.ParameterType
 
 let private getTypesFromReturnType returnType =
     match returnType.FullName with
     | "System.Void" -> seq []
-    | _ -> seq [ TypeReference(returnType) ]
+    | _ -> seq [ TypeReference returnType ]
 
 let private getReferencesFromBody body =
     match body with
@@ -30,5 +30,5 @@ let private getReferencesFromBody body =
     | _ ->
         seq [
             yield! body.Instructions |> Seq.collect Instructions.getMethodsUsedByInstruction
-            yield! body.Variables |> Seq.map (fun variable -> TypeReference(variable.VariableType))
+            yield! body.Variables |> Seq.map (fun variable -> TypeReference variable.VariableType)
         ]

@@ -9,13 +9,13 @@ let findInDirectoryPath directoryPath =
 
 let private getForSubdirectoryPath subdirectoryPath =
     seq [
-        yield! getWhenProjectDirectoryPath subdirectoryPath
-        yield! findInDirectoryPath(subdirectoryPath)
+        yield! subdirectoryPath |> getWhenProjectDirectoryPath
+        yield! subdirectoryPath |> findInDirectoryPath
     ]
 
 let private getWhenProjectDirectoryPath directoryPath =
     let hasProjectFile =
-        Path.Join(directoryPath, "TestCase.csproj")
+        Path.Join (directoryPath, "TestCase.csproj")
         |> File.Exists
 
     match hasProjectFile with
