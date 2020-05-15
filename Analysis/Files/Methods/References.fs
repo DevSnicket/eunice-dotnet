@@ -3,17 +3,11 @@ module rec DevSnicket.Eunice.Analysis.Files.Methods.References
 open DevSnicket.Eunice.Analysis.Files
 
 let getReferencesOfMethod (method: Mono.Cecil.MethodDefinition) =
-    let isDeclaringType reference =
-        match reference with
-        | TypeReference ``type`` -> ``type``.FullName = method.DeclaringType.FullName
-        | MethodReference _ -> false
-
     seq [
         yield! method.Parameters |> Seq.map getTypeFromParameter
         yield! method.ReturnType |> getTypesFromReturnType
         yield! method.Body |> getReferencesFromBody
     ]
-    |> Seq.filter (isDeclaringType >> not)
 
 let private getTypeFromParameter parameter =
     TypeReference parameter.ParameterType

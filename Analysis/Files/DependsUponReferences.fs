@@ -2,12 +2,19 @@ module rec DevSnicket.Eunice.Analysis.Files.DependsUponReferences
 
 open DevSnicket.Eunice.Analysis.Files
 open DevSnicket.Eunice.Analysis.Files.Namespaces
+open System
 
-let createDependsUponFromReferences (references: MethodOrTypeReference seq): DependUpon list =
-    references
+type ReferencesAndReferrer =
+    {
+        References: MethodOrTypeReference seq
+        ReferrerType: Mono.Cecil.TypeReference
+    }
+
+let createDependsUponFromReferences (referencesAndReferrer: ReferencesAndReferrer): DependUpon list =
+    referencesAndReferrer.References
     |> Seq.collect splitGenericArgumentsFromReference
     |> Seq.groupBy getTypeNamespaceAndNameFromReference
-    |> Seq.collect createItemsAndNamespacesFromTypeAndMethods
+    |> Seq.collect (createItemAndNamespaceFromTypeAndMethodsOfReferrerType referencesAndReferrer.ReferrerType)
     |> NamespaceHierarchy.groupNamespaces
         {
             CreateNamespaceItem = createDependUponFromNamespaceItem
@@ -23,43 +30,58 @@ let private splitGenericArgumentsFromReference reference =
         | :? Mono.Cecil.GenericInstanceType as genericType ->
             seq [
                 reference
-                yield! genericType.GenericArguments |> Seq.map (fun argument -> TypeReference(argument))
+                yield! genericType.GenericArguments |> Seq.map TypeReference
             ]
         | _ ->
             seq [ reference ]
 
+type private NameAndNamespace =
+    {
+        Name: string
+        Namespace: string
+    }
+
 let private getTypeNamespaceAndNameFromReference reference =
     match reference with
-    | MethodReference method -> method.DeclaringType |> getNamespaceAndNameFromType
-    | TypeReference ``type`` -> ``type`` |> getNamespaceAndNameFromType
+    | MethodReference method -> method.DeclaringType
+    | TypeReference ``type`` -> ``type``
+    |> fun ``type`` ->
+        {
+            Name = ``type``.Name
+            Namespace = ``type``.Namespace
+        }
 
-let private getNamespaceAndNameFromType ``type`` =
-    {|
-        Name = ``type``.Name
-        Namespace = ``type``.Namespace
-    |}
-
-let private createItemsAndNamespacesFromTypeAndMethods (``type``, references) =
-    match ``type``.Namespace with
-    | "System" ->
+let private createItemAndNamespaceFromTypeAndMethodsOfReferrerType referrerType (``type``, references) =
+    if ``type``.Namespace = "System" then
         seq []
-    | _ ->
+    else if ``type``.Namespace = referrerType.Namespace && ``type``.Name = referrerType.Name then
+        references
+        |> Seq.choose createItemFromMethodReference
+        |> Seq.map (fun methodReference -> { Item = methodReference; Namespace = "" })
+    else
         seq [ {
             Item =
                 {
                     Identifier =
                         ``type``.Name;
                     Items =
-                        references |> Seq.collect createItemsFromMethodReference |> Seq.toList
+                        references
+                        |> Seq.choose createItemFromMethodReference
+                        |> Seq.toList
                 }
             Namespace =
                 ``type``.Namespace
         } ]
 
-let private createItemsFromMethodReference reference =
+let private createItemFromMethodReference reference =
     match reference with
-    | MethodReference method -> seq [ { Identifier = method.Name; Items = [] } ]
-    | _ -> seq []
+    | MethodReference method ->
+        Some {
+            Identifier = method.Name
+            Items = []
+        }
+    | _ ->
+        None
 
 let private createDependUponFromNamespaceItem namespaceItem =
     {
