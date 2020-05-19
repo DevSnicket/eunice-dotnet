@@ -43,45 +43,61 @@ type private NameAndNamespace =
 
 let private getTypeNamespaceAndNameFromReference reference =
     match reference with
-    | MethodReference method -> method.DeclaringType
-    | TypeReference ``type`` -> ``type``
+    | MethodReference method ->
+        method.DeclaringType
+    | TypeReference ``type`` ->
+        match ``type``.DeclaringType with
+        | null -> ``type``
+        | declaringType -> declaringType
     |> fun ``type`` ->
         {
             Name = ``type``.Name
             Namespace = ``type``.Namespace
         }
 
-let private createItemAndNamespaceFromTypeAndMethodsOfReferrerType referrerType (``type``, references) =
-    if ``type``.Namespace = "System" then
+let private createItemAndNamespaceFromTypeAndMethodsOfReferrerType referrerType (itemType, references) =
+    let isTypeReferenceOfItemType (otherType: Mono.Cecil.TypeReference) =
+        itemType.Namespace = otherType.Namespace
+        &&
+        itemType.Name = otherType.Name
+
+    let createItemFromReference reference: DependUpon option =
+        match reference with
+        | MethodReference methodReference ->
+            Some {
+                Identifier = methodReference.Name
+                Items = []
+            }
+        | TypeReference typeReference ->
+            match typeReference |> isTypeReferenceOfItemType with
+            | true ->
+                None
+            | false ->
+                Some {
+                    Identifier = typeReference.Name
+                    Items = []
+                }
+
+    if itemType.Namespace = "System" then
         seq []
-    else if ``type``.Namespace = referrerType.Namespace && ``type``.Name = referrerType.Name then
+    else if referrerType |> isTypeReferenceOfItemType then
         references
-        |> Seq.choose createItemFromMethodReference
-        |> Seq.map (fun methodReference -> { Item = methodReference; Namespace = "" })
+        |> Seq.choose createItemFromReference
+        |> Seq.map (fun item -> { Item = item; Namespace = "" })
     else
         seq [ {
             Item =
                 {
                     Identifier =
-                        ``type``.Name;
+                        itemType.Name;
                     Items =
                         references
-                        |> Seq.choose createItemFromMethodReference
+                        |> Seq.choose createItemFromReference
                         |> Seq.toList
                 }
             Namespace =
-                ``type``.Namespace
+                itemType.Namespace
         } ]
-
-let private createItemFromMethodReference reference =
-    match reference with
-    | MethodReference method ->
-        Some {
-            Identifier = method.Name
-            Items = []
-        }
-    | _ ->
-        None
 
 let private createDependUponFromNamespaceItem namespaceItem =
     {
