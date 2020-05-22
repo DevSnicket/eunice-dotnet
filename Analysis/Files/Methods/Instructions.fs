@@ -8,5 +8,7 @@ let getMethodUsedByInstruction (instruction: Mono.Cecil.Cil.Instruction) =
         Some (MethodReference methodReference)
     | :? Mono.Cecil.FieldReference as fieldReference ->
         Some (FieldReference fieldReference)
+    | :? Mono.Cecil.TypeReference as typeReference ->
+        Some (TypeReference typeReference)
     | _ ->
         None
