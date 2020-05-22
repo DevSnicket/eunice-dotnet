@@ -12,7 +12,7 @@
 		<Compile Include="Namespaces/ItemAndNamespace.fs" />
 		<Compile Include="Namespaces/NamespaceItem.fs" />
 		<Compile Include="Namespaces/NamespaceHierarchy.fs" />
-		<Compile Include="MethodOrTypeReference.fs" />
+		<Compile Include="Reference.fs" />
 		<Compile Include="DependsUponReferences.fs" />
 		<Compile Include="Methods/Instructions.fs" />
 		<Compile Include="Methods/References.fs" />

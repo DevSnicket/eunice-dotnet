@@ -6,7 +6,7 @@ open System
 
 type ReferencesAndReferrer =
     {
-        References: MethodOrTypeReference seq
+        References: Reference seq
         ReferrerType: Mono.Cecil.TypeReference
     }
 
@@ -23,6 +23,7 @@ let createDependsUponFromReferences (referencesAndReferrer: ReferencesAndReferre
 
 let private splitGenericArgumentsFromReference reference =
     match reference with
+    | FieldReference _
     | MethodReference _ ->
         seq [ reference ]
     | TypeReference ``type`` ->
@@ -43,6 +44,8 @@ type private NameAndNamespace =
 
 let private getTypeNamespaceAndNameFromReference reference =
     match reference with
+    | FieldReference field ->
+        field.DeclaringType
     | MethodReference method ->
         method.DeclaringType
     | TypeReference ``type`` ->
@@ -63,6 +66,11 @@ let private createItemAndNamespaceFromTypeAndMethodsOfReferrerType referrerType 
 
     let createItemFromReference reference: DependUpon option =
         match reference with
+        | FieldReference fieldReference ->
+            Some {
+                Identifier = fieldReference.Name
+                Items = []
+            }
         | MethodReference methodReference ->
             Some {
                 Identifier = methodReference.Name

@@ -113,10 +113,11 @@ let private createItemFromClassOrInterface ``type`` =
 
     and isReferenceToParameterlessConstructor reference =
         match reference with
-        | MethodReference method ->
-            method.Name = ".ctor" && method.Parameters.Count = 0
+        | FieldReference _
         | TypeReference _ ->
             false
+        | MethodReference method ->
+            method.Name = ".ctor" && method.Parameters.Count = 0
 
     and createItemFromProperty property =
         {
