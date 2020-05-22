@@ -7,6 +7,7 @@ Analysis/Files/Tests \
 -l "trx;LogFileName=.trx" \
 -p:AltCover=true \
 -p:AltCoverAssemblyFilter="^(?!DevSnicket.Eunice.Analysis.Files$)" \
+-p:AltCoverTypeFilter="Program" \
 -p:AltCoverForce=true \
 -p:AltCoverXmlReport=TestResults/coverage.xml
 

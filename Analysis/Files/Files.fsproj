@@ -2,8 +2,9 @@
 	<PropertyGroup>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AssemblyName>DevSnicket.Eunice.Analysis.Files</AssemblyName>
+		<OutputType>Exe</OutputType>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="Item.fs" />
@@ -24,6 +25,7 @@
 		<Compile Include="Yaml/DependsUpon.fs" />
 		<Compile Include="Yaml/Items.fs" />
 		<Compile Include="AssemblyAnalysis.fs" />
+		<Compile Include="Program.fs" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Mono.Cecil" Version="0.11.2" />
