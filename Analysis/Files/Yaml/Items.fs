@@ -5,7 +5,6 @@ open DevSnicket.Eunice.Analysis.Files
 let formatItems items =
     items
     |> linesForItems
-    |> String.concat "\n"
 
 let private linesForItems items =
     items

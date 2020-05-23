@@ -1,5 +1,6 @@
 module rec DevSnicket.Eunice.Analysis.Files.Tests.TestsFromFileSystem
 
+open System
 open System.IO
 
 let testCases = TestCases.Parameters.createParameters
@@ -15,9 +16,13 @@ let runTestsFromFileSystem configuration directory =
             | _ ->
                 Path.Join (directory, "Expected.yaml")
 
-        let! actual =
+        let! actualLines =
             Path.Join (directory, "bin", configuration, "TestCase.dll")
             |> DevSnicket.Eunice.Analysis.Files.AssemblyAnalysis.analyzeAssemblyWithFilePath
+
+        let actual =
+            actualLines
+            |> String.concat "\n"
 
         let expected =
             expectedPath |> File.ReadAllText

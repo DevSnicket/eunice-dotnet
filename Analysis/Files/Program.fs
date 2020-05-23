@@ -7,7 +7,7 @@ let main argv =
         match argv with
         | [| filePath |] ->
             let! yaml = filePath |> AssemblyAnalysis.analyzeAssemblyWithFilePath
-            yaml |> Console.Write
+            yaml |> Seq.iter Console.WriteLine
             return 0
         | _ ->
             return 1
