@@ -3,10 +3,10 @@
 set -e
 
 dotnet test \
-Analysis/Files/Tests \
+Analysis/Tests \
 -l "trx;LogFileName=.trx" \
 -p:AltCover=true \
--p:AltCoverAssemblyFilter="^(?!DevSnicket.Eunice.Analysis.Files$)" \
+-p:AltCoverAssemblyFilter="^(?!DevSnicket.Eunice.Analysis$)" \
 -p:AltCoverTypeFilter="Program" \
 -p:AltCoverForce=true \
 -p:AltCoverXmlReport=TestResults/coverage.xml
@@ -18,12 +18,12 @@ dotnet tool install dotnet-reportgenerator-globaltool \
 || true # ignore error raised when already installed
 
 ./reportgenerator \
--reports:Analysis/Files/Tests/TestResults/coverage.xml \
+-reports:Analysis/Tests/TestResults/coverage.xml \
 -reporttypes:"Html;JsonSummary" \
--targetdir:Analysis/Files/Tests/TestResults/CoverageReport
+-targetdir:Analysis/Tests/TestResults/CoverageReport
 
 function getCoverage {
-	value=$(grep -Po "(?<=\"$1coverage\": )[\.0-9]*" Analysis/Files/Tests/TestResults/CoverageReport/Summary.json | head -1)
+	value=$(grep -Po "(?<=\"$1coverage\": )[\.0-9]*" Analysis/Tests/TestResults/CoverageReport/Summary.json | head -1)
 	echo $value%
 }
 echo

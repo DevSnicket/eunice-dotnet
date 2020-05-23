@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputType>Exe</OutputType>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="DependsUpon.fs" />
+		<Compile Include="Item.fs" />
+		<Compile Include="Namespaces/Segments/ItemAndNamespaceSegments.fs" />
+		<Compile Include="Namespaces/Segments/GroupItemsByBaseNamespace.fs" />
+		<Compile Include="Namespaces/ItemAndNamespace.fs" />
+		<Compile Include="Namespaces/NamespaceItem.fs" />
+		<Compile Include="Namespaces/GroupNamespaces.fs" />
+		<Compile Include="Reference.fs" />
+		<Compile Include="CreateDependsUponFromReferencesAndReferrer.fs" />
+		<Compile Include="GetReferencesOfMethod.fs" />
+		<Compile Include="CreateItemFromDelegate.fs" />
+		<Compile Include="CreateItemFromType.fs" />
+		<Compile Include="Yaml/IndentLines.fs" />
+		<Compile Include="Yaml/FormatKeyValueLinesMapping.fs" />
+		<Compile Include="Yaml/SequenceBlockEntryFromLines/.fs" />
+		<Compile Include="Yaml/FormatDependsUponMapping.fs" />
+		<Compile Include="Yaml/FormatItems.fs" />
+		<Compile Include="AnalyzeAssemblyPath.fs" />
+		<Compile Include="AnalyzePath/.fs" />
+		<Compile Include="Program.fs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Mono.Cecil" Version="0.11.2" />
+	</ItemGroup>
+</Project>

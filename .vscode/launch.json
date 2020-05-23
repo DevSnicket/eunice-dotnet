@@ -1,24 +1,22 @@
 {
 	"configurations": [
 		{
-			"args": [ "Analysis/Files/Tests/bin/Debug/Newtonsoft.Json.dll" ],
+			"args": [ "Analysis/Tests/bin/Debug/Newtonsoft.Json.dll" ],
 			"justMyCode": false,
-			"name": "files console",
-			"preLaunchTask": "build",
-			"program": "${workspaceFolder}/Analysis/Files/bin/Debug/DevSnicket.Eunice.Analysis.Files.dll",
+			"name": "console",
+			"program": "${workspaceFolder}/Analysis/bin/Debug/DevSnicket.Eunice.Analysis.dll",
 			"request": "launch",
 			"requireExactSource": false,
 			"type": "coreclr"
 		},
 		{
 			"args": [
-				"DevSnicket.Eunice.Analysis.Files.Tests.dll",
+				"DevSnicket.Eunice.Analysis.Tests.dll",
 				"-nologo"
 			],
-			"cwd": "${workspaceFolder}/Analysis/Files/Tests/bin/Debug",
+			"cwd": "${workspaceFolder}/Analysis/Tests/bin/Debug",
 			"justMyCode": false,
-			"name": "files tests",
-			"preLaunchTask": "build",
+			"name": "tests",
 			"program": "xunit.console.dll",
 			"request": "launch",
 			"requireExactSource": false,
