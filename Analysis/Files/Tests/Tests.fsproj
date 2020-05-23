@@ -29,9 +29,9 @@
 		<ItemGroup>
 			<TestCaseProjects Include="TestCases/**/*.csproj" />
 		</ItemGroup>
-		<MSBuild Projects="@(TestCaseProjects)" Targets="Restore" />
-		<MSBuild Projects="@(TestCaseProjects)" Properties="Configuration=Debug" />
-		<MSBuild Projects="@(TestCaseProjects)" Properties="Configuration=Release" />
+		<MSBuild BuildInParallel="true" Projects="@(TestCaseProjects)" Targets="Restore" />
+		<MSBuild BuildInParallel="true" Projects="@(TestCaseProjects)" Properties="Configuration=Debug" />
+		<MSBuild BuildInParallel="true" Projects="@(TestCaseProjects)" Properties="Configuration=Release" />
 	</Target>
 	<Target AfterTargets="Build" Name="WriteXunitConsoleRuntime">
 		<Copy DestinationFiles="$(OutputPath)xunit.console.runtimeconfig.json" SourceFiles="$(OutputPath)$(AssemblyName).runtimeconfig.json" />
