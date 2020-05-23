@@ -3,8 +3,13 @@ open System
 
 [<EntryPoint>]
 let main argv =
-    match argv with
-    | [| filePath |] ->
-        filePath |> AssemblyAnalysis.analyzeAssemblyWithFilePath |> Console.Write
-        0
-    | _ -> 1
+    async {
+        match argv with
+        | [| filePath |] ->
+            let! yaml = filePath |> AssemblyAnalysis.analyzeAssemblyWithFilePath
+            yaml |> Console.Write
+            return 0
+        | _ ->
+            return 1
+    }
+    |> Async.RunSynchronously
