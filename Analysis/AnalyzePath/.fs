@@ -9,6 +9,7 @@ let analyzePath path =
         | true ->
             let! yamlForFiles =
                 Directory.EnumerateFiles (path, "*.dll")
+                |> Seq.sort
                 |> Seq.map analyzeAssemblyPath
                 |> Async.Parallel
 
