@@ -1,4 +1,4 @@
-﻿- id: Class
+﻿- id: DeclarationClass
   items:
     id: Method
     dependsUpon: VariableClass
