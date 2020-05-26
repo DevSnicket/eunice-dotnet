@@ -4,10 +4,7 @@ git submodule add --force \
 	https://$1@github.com/DevSnicket/eunice.git \
 	website
 
-git log \
-	--date=short \
-	--pretty='format:---%n%ad%n%B' \
-	> website/dotnet/git-log.txt
+./git-log-write-file.sh
 
 cd website
 

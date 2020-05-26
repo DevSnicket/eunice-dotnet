@@ -3,5 +3,6 @@
 \bin
 \obj
 \reportgenerator.exe
+\website
 TestResults
 *.fsproj.user
