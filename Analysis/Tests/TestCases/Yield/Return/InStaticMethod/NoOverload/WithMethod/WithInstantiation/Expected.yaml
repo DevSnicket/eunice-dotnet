@@ -1,0 +1,13 @@
+﻿- id: InstantiateAndYieldClass
+  items:
+    - id: InstantiateMethod
+      dependsUpon:
+        id: InstantiatedClass
+        items: .ctor
+    - id: YieldMethod
+      dependsUpon:
+        id: System
+        items:
+          id: Collections
+          items: IEnumerable
+- InstantiatedClass

@@ -1,0 +1,10 @@
+﻿- id: Class
+  items:
+    - id: Caller
+      dependsUpon:
+        - Callee
+        - id: System
+          items:
+            id: Collections
+            items: IEnumerable
+    - Callee

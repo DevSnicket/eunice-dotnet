@@ -1,0 +1,22 @@
+﻿- id: DeclarationAndYieldClass
+  items:
+    - id: _fieldForParameterless
+      dependsUpon: FieldForParameterlessClass
+    - id: _fieldForParameterized
+      dependsUpon: FieldForParameterizedClass
+    - id: Method
+      dependsUpon:
+        - id: System
+          items:
+            id: Collections
+            items: IEnumerable
+        - _fieldForParameterless
+    - id: Method
+      dependsUpon:
+        - id: System
+          items:
+            id: Collections
+            items: IEnumerable
+        - _fieldForParameterized
+- FieldForParameterizedClass
+- FieldForParameterlessClass

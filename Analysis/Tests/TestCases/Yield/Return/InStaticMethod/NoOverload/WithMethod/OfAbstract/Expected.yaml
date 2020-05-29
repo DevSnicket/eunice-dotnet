@@ -1,0 +1,9 @@
+﻿- id: Class
+  items:
+    - AbstractMethod
+    - id: YieldMethod
+      dependsUpon:
+        id: System
+        items:
+          id: Collections
+          items: IEnumerable

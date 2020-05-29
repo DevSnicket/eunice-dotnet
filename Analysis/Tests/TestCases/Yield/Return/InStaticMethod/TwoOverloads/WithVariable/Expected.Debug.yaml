@@ -1,0 +1,18 @@
+﻿- id: DeclarationAndYieldClass
+  items:
+    - id: Method
+      dependsUpon:
+        - id: System
+          items:
+            id: Collections
+            items: IEnumerable
+        - VariableForParameterlessClass
+    - id: Method
+      dependsUpon:
+        - id: System
+          items:
+            id: Collections
+            items: IEnumerable
+        - VariableForParameterizedClass
+- VariableForParameterizedClass
+- VariableForParameterlessClass

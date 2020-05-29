@@ -1,0 +1,8 @@
+﻿- id: Class
+  items:
+    id: Method
+    dependsUpon:
+      id: System
+      items:
+        id: Collections
+        items: IEnumerable

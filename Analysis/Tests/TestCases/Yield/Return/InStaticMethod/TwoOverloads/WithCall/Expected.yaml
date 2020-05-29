@@ -1,0 +1,20 @@
+﻿- id: Class
+  items:
+    - id: Caller
+      dependsUpon:
+        - CalleeOfParameterless
+        - id: System
+          items:
+            id: Collections
+            items: IEnumerable
+    - CalleeOfParameterless
+    - id: Caller
+      dependsUpon:
+        - CalleeOfParameterized
+        - ParameterClass
+        - id: System
+          items:
+            id: Collections
+            items: IEnumerable
+    - CalleeOfParameterized
+- ParameterClass

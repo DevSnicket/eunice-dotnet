@@ -1,0 +1,16 @@
+﻿- id: Class
+  items:
+    - id: Method
+      dependsUpon:
+        id: System
+        items:
+          id: Collections
+          items: IEnumerable
+    - id: Method
+      dependsUpon:
+        - ParameterClass
+        - id: System
+          items:
+            id: Collections
+            items: IEnumerable
+- ParameterClass

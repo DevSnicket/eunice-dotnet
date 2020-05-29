@@ -1,0 +1,10 @@
+﻿- ParameterClass
+- id: YieldClass
+  items:
+    id: Method
+    dependsUpon:
+      - ParameterClass
+      - id: System
+        items:
+          id: Collections
+          items: IEnumerable

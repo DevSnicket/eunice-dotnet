@@ -1,0 +1,12 @@
+﻿- ReturnClass
+- id: YieldClass
+  items:
+    id: Method
+    dependsUpon:
+      - ReturnClass
+      - id: System
+        items:
+          id: Collections
+          items:
+            id: Generic
+            items: IEnumerable`1

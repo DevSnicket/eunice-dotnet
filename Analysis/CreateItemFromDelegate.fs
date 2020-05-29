@@ -1,14 +1,14 @@
 module rec DevSnicket.Eunice.Analysis.CreateItemFromDelegate
 
 open DevSnicket.Eunice.Analysis.CreateDependsUponFromReferencesAndReferrer
-open DevSnicket.Eunice.Analysis.Methods.GetReferencesOfMethod
+open DevSnicket.Eunice.Analysis.GetReferencesInMethod
 
 let createItemFromDelegate (``delegate``: Mono.Cecil.TypeDefinition) =
     let rec createItemFromDelegate () =
         {
             DependsUpon =
                 ``delegate``.Methods
-                |> getReferencesOfMethods
+                |> getReferencesInMethods
                 |> createDependsUponFromReferences
             Identifier =
                 ``delegate``.Name
@@ -25,10 +25,10 @@ let createItemFromDelegate (``delegate``: Mono.Cecil.TypeDefinition) =
 
     createItemFromDelegate ()
 
-let private getReferencesOfMethods methods =
+let private getReferencesInMethods methods =
     methods
     |> Seq.find isInvokeMethod
-    |> getReferencesOfMethod
+    |> getReferencesInMethod
 
 let private isInvokeMethod method =
     method.Name = "Invoke"

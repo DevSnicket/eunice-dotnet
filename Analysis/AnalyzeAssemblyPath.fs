@@ -1,8 +1,8 @@
 module rec DevSnicket.Eunice.Analysis.AnalyzeAssemblyPath
 
-open DevSnicket.Eunice.Analysis.CreateItemFromType
 open DevSnicket.Eunice.Analysis.Namespaces
 open DevSnicket.Eunice.Analysis.Namespaces.GroupNamespaces
+open DevSnicket.Eunice.Analysis.Types.CreateItemFromType
 open DevSnicket.Eunice.Analysis.Yaml.FormatItems
 open System
 open System.IO
